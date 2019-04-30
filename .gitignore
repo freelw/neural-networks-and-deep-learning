@@ -6,3 +6,5 @@
 .DS_Store
 loc.py
 src/ec2
+.vscode
+build
