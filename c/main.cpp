@@ -21,7 +21,7 @@ int main(int argc, char *argv[])
     sizes.push_back(784);
     sizes.push_back(30);
     sizes.push_back(10);
-    NetWork mynet(sizes);
+    NetWork mynet(sizes, loader);
     cout << "done." << endl;
     return 0;
 }
