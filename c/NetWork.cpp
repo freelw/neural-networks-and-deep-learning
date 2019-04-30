@@ -1,4 +1,4 @@
-#include "Network.h"
+#include "NetWork.h"
 
 
 
@@ -8,7 +8,7 @@ NetWork::NetWork(const std::vector<int> &sizes)
 {
 
     
-
+    
 }
 
 NetWork::~NetWork()

@@ -8,7 +8,7 @@ class NetWork
 private:
     
 public:
-    NetWork::NetWork(const std::vector<int> sizes);
+    NetWork(const std::vector<int> sizes);
     ~NetWork();
 
 };
