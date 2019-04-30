@@ -1,4 +1,4 @@
-#include "NetWork.h"
+#include "network.h"
 
 #include <stdio.h>
 

@@ -1,5 +1,5 @@
 #include "mnist_loader.h"
-#include "NetWork.h"
+#include "network.h"
 #include <iostream>
 #include <vector>
 
