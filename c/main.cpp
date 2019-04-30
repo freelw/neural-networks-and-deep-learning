@@ -1,6 +1,7 @@
 #include "mnist_loader.h"
-
+#include "network.h"
 #include <iostream>
+#include <vector>
 
 using namespace std;
 int main(int argc, char *argv[])
@@ -16,5 +17,11 @@ int main(int argc, char *argv[])
     cout << loader.training_data_y_len << endl;
     cout << loader.test_data_len << endl;
     cout << loader.test_data_x_len << endl;
+    vector<int> sizes;
+    sizes.push_back(784);
+    sizes.push_back(30);
+    sizes.push_back(10);
+    NetWork mynet(sizes);
+    cout << "done." << endl;
     return 0;
 }
