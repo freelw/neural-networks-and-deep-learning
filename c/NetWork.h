@@ -6,9 +6,12 @@
 class NetWork
 {
 private:
-    
+    int num_layers;
+    std::vector<int> sizes;
+    float **bias;
+    float ***weights;
 public:
-    NetWork(const std::vector<int> sizes);
+    NetWork(const std::vector<int> &_sizes);
     ~NetWork();
 
 };
