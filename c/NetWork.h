@@ -13,10 +13,17 @@ private:
     float ***weights;
     float **nabla_bias;
     float ***nabla_weights;
+    float **backprop_nabla_bias;
+    float ***backprop_nabla_weights;
     float **delta_bias;
     float ***delta_weights;
     int max_size;
     float *tmpv;
+
+    float *delta;
+    float *z;
+    float **activations;
+    float **zs;
     MnistLoader &loader;
 public:
     NetWork(const std::vector<int> &_sizes, MnistLoader &_loader);
@@ -31,10 +38,13 @@ public:
         int mini_batch_size,
         float eta
     );
-    void update_mini_batch(float **p_training_data_x, float **p_training_data_y, size_t offset, int mini_batch_size, size_t len);
+    void update_mini_batch(float **p_training_data_x, float **p_training_data_y, size_t offset, int mini_batch_size, size_t len, float eta);
     void initwb(float *** & weights, float ** & bias);
     void fill0wb(float *** & _weights, float ** & _bias);
+    void add_nabla_delta();
+    void minus_wb(int batch_cnt, float eta);
     void backprop(float *x, float *y);
+    
 };
 
 
