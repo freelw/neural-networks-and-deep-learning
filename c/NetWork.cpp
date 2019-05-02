@@ -91,6 +91,8 @@ NetWork::NetWork(const std::vector<int> &_sizes, MnistLoader &_loader)
     }
     tmpv = new float[max_size];
     delta = new float[max_size];
+    cost_der = new float[max_size];
+    sp = new float[max_size];
     z = new float[max_size];
 
     activations = new float*[num_layers];
@@ -141,6 +143,16 @@ void NetWork::sigmoid_array(float *arr, size_t size) {
 
 float NetWork::sigmoid(float z) {
     return 1./(1.+exp(-z));
+}
+
+void NetWork::sigmoid_prime_array(float *arr, size_t size) {
+    for (size_t i = 0; i < size; ++ i) {
+        arr[i] = sigmoid_prime(arr[i]);
+    }
+}
+
+float NetWork::sigmoid_prime(float z) {
+    return sigmoid(z)*(1-sigmoid(z))
 }
 
 void NetWork::dot(float **w, const std::vector<float> & t, float *tmpv, size_t x, size_t y) {
@@ -218,4 +230,29 @@ void NetWork::backprop(float *px, float *py) {
         }
     }
 
+    cost_derivative(activations[num_layers-1], py, cost_der, loader.training_data_y_len);
+    for (size_t i = 0; i < loader.training_data_y_len; ++ i) {
+        cost_der[i] *= sigmoid_prime(zs[num_layers-2][i]);
+        nabla_bias[num_layers-2][i] = cost_der[i];
+    }
+    size_t x = sizes[num_layers-2];
+    size_t y = sizes[num_layers-1];
+    for (size_t i = 0; i < y; ++ i) {
+        for (size_t j = 0; j < x; ++ j) {
+            nabla_weights[num_layers-1][i][j] = cost_der[i]*activations[num_layers-2][j];
+        }
+    }
+
+    for (int l = num_layers-3; l >= 0; -- l) {
+
+
+
+    }
+}
+
+
+void NetWork::cost_derivative(float *pa, float *py, float *c_d, size_t size) {
+    for (size_t i = 0; i < size; ++ i) {
+        c_d[i] = pa[i] - py[i];
+    }
 }

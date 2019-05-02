@@ -21,6 +21,8 @@ private:
     float *tmpv;
 
     float *delta;
+    float *cost_der;
+    float *sp;
     float *z;
     float **activations;
     float **zs;
@@ -31,6 +33,8 @@ public:
     std::vector<float> NetWork::feedforward(const std::vector<float> & a);
     void sigmoid_array(float *arr, size_t size);
     float sigmoid(float z);
+    void sigmoid_prime_array(float *arr, size_t size);
+    float sigmoid_prime(float z);
     void dot(float **, const std::vector<float> & t, float *tmpv, size_t x, size_t y);
     void shuffle(float **p_training_data_x, float **p_training_data_y, size_t len);
     void SGD(
@@ -44,7 +48,7 @@ public:
     void add_nabla_delta();
     void minus_wb(int batch_cnt, float eta);
     void backprop(float *x, float *y);
-    
+    void cost_derivative(float *pa, float *py, float *c_d, size_t size);
 };
 
 
