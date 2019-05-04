@@ -30,7 +30,7 @@ private:
 public:
     NetWork(const std::vector<int> &_sizes, MnistLoader &_loader);
     ~NetWork();
-    std::vector<float> NetWork::feedforward(const std::vector<float> & a);
+    std::vector<float> feedforward(const std::vector<float> & a);
     void sigmoid_array(float *arr, size_t size);
     float sigmoid(float z);
     void sigmoid_prime_array(float *arr, size_t size);

@@ -133,6 +133,11 @@ std::vector<float> NetWork::feedforward(const std::vector<float> & a) {
             tmpv[j] += bias[i][j];
         }
     }
+    std::vector<float> ret;
+    for (size_t i = 0, len = sizes[num_layers]; i < len; ++ i) {
+        ret.push_back(tmpv[i]);
+    }
+    return ret;
 }
 
 void NetWork::sigmoid_array(float *arr, size_t size) {
