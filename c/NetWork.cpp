@@ -4,12 +4,14 @@
 #include <stdio.h>
 #include <iostream>
 
+using namespace std;
+
 float randfloat() {
-    return rand() / 32767.;
+    return rand() * 1. / RAND_MAX;
 }
 
 float randinterval(int l, int r) {
-    return rand() / 32767. * (r-l) + l;
+    return rand() * 1. / RAND_MAX * (r-l) + l;
 }
 
 void NetWork::initwb(float *** & _weights, float ** & _bias) {
@@ -18,6 +20,7 @@ void NetWork::initwb(float *** & _weights, float ** & _bias) {
     for (size_t i = 0; i < num_layers-1; ++ i) {
         size_t x = sizes[i];
         size_t y = sizes[i+1];
+        //cout << "initwb  y : " << y << endl;
         _bias[i] = new float[y];
         for (size_t j = 0; j < y; ++ j) {
             _bias[i][j] = randfloat();
@@ -51,11 +54,15 @@ void NetWork::add_nabla_delta() {
     for (size_t i = 0; i < num_layers-1; ++ i) {
         size_t x = sizes[i];
         size_t y = sizes[i+1];
+        //cout << "i x y : " << i << " " << x << " " << y << endl;
         for (size_t j = 0; j < y; ++ j) {
+            //cout << "i j: " << i << " " << j << endl;
+            //cout << "nabla_bias[i][j] delta_bias[i][j] " << nabla_bias[i][j] << " " << delta_bias[i][j] << endl;
             nabla_bias[i][j] += delta_bias[i][j];
         }
         for (size_t j = 0; j < y; ++ j) {
             for (size_t k = 0; k < x; ++ k) {
+                //cout << "i x k : " << i << " " << x << " " << k << endl;
                 nabla_weights[i][j][k] += delta_weights[i][j][k];
             }
         }
@@ -188,44 +195,52 @@ void NetWork::SGD(
     int mini_batch_size,
     float eta
 ) {
+    //cout << "training_data_len : " << loader.training_data_len << endl;
     float **p_training_data_x = new float*[loader.training_data_len];
     float **p_training_data_y = new float*[loader.training_data_len];
     for (size_t j = 0; j < loader.training_data_len; ++ j) {
         p_training_data_x[j] = loader.training_data_x[j];
         p_training_data_y[j] = loader.training_data_y[j];
     }
+
+    //cout << "dbg1" << endl;
     for (size_t j = 0; j < epochs; ++ j) {
+        //cout << "before shuffle" << endl;
         shuffle(p_training_data_x, p_training_data_y, loader.training_data_len);
+        //cout << "after shuffle" << endl;
         for (size_t offset = 0; offset < loader.training_data_len; offset += mini_batch_size) {
+            //cout << "offset : " << offset << endl;
             update_mini_batch(p_training_data_x, p_training_data_y, offset, mini_batch_size, loader.training_data_len, eta);
         }
-
+        //cout << "before evaluate" << endl;
         int evaluate_cnt = evaluate();
         std::cout << "Epoch " << j << ": " << evaluate_cnt << " / " << loader.test_data_len << std::endl;
     }
-
 }
 
 void NetWork::update_mini_batch(float **p_training_data_x, float **p_training_data_y, size_t offset, int mini_batch_size, size_t len, float eta) {
     fill0wb(nabla_weights, nabla_bias);
     int batch_size = mini_batch_size > len - offset ? len - offset : mini_batch_size;
     int batch_cnt = 0;
+    //cout << "batch_size : " << batch_size << endl;
     for (size_t i = offset; i < offset + batch_size; ++ i) {
+        //cout << "i : " << i << endl;
         ++ batch_cnt;
         fill0wb(delta_weights, delta_bias);
+        //cout << "after fill0wb(delta_weights, delta_bias);" << endl;
         backprop(p_training_data_x[i], p_training_data_y[i]);
+        //cout << "after bp" << endl;
         add_nabla_delta();
+        //cout << "after bp1" << endl;
     }
     minus_wb(batch_cnt, eta);
 }
 
 void NetWork::backprop(float *px, float *py) {
     fill0wb(backprop_nabla_weights, backprop_nabla_bias);
-
     for (size_t i = 0; i < sizes[0]; ++ i) {
         activations[0][i] = px[i];
     }
-
     for (size_t i = 0; i < num_layers-1; ++ i) {
         size_t x = sizes[i];
         size_t y = sizes[i+1];
@@ -239,7 +254,6 @@ void NetWork::backprop(float *px, float *py) {
             activations[i+1][j] = sigmoid(zs[i][j]);
         }
     }
-
     cost_derivative(activations[num_layers-1], py, cost_der, loader.training_data_y_len);
     for (size_t i = 0; i < loader.training_data_y_len; ++ i) {
         cost_der[i] *= sigmoid_prime(zs[num_layers-2][i]);
@@ -249,27 +263,31 @@ void NetWork::backprop(float *px, float *py) {
     size_t y = sizes[num_layers-1];
     for (size_t i = 0; i < y; ++ i) {
         for (size_t j = 0; j < x; ++ j) {
-            nabla_weights[num_layers-1][i][j] = cost_der[i]*activations[num_layers-2][j];
+            nabla_weights[num_layers-2][i][j] = cost_der[i]*activations[num_layers-2][j];
         }
     }
-
     for (int l = num_layers-3; l >= 0; -- l) {
         size_t x = sizes[l];
         size_t y = sizes[l+1];
+        size_t z = sizes[l+2];
         for (size_t i = 0; i < y; ++ i) {
             sp[i] = zs[l][i];
         }
         sigmoid_array(sp, y);
-        for (size_t i = 0; i < x; ++ i) {
+
+        for (size_t i = 0; i < y; ++ i) {
             float sum = 0;
-            for (size_t j = 0; j < y; ++ j) {
-                sum += weights[l][j][i] * nabla_bias[l+1][j];
+            for (size_t j = 0; j < z; ++ j) {
+                sum += weights[l+1][j][i] * nabla_bias[l+1][j];
             }
             nabla_bias[l][i] = sum * sp[i];
         }
-        size_t z = sizes[l-1];
+
+
+
+        size_t w = sizes[l-1];
         for (size_t i = 0; i < x; ++ i) {
-            for (size_t j = 0; j < z; ++ j) {
+            for (size_t j = 0; j < w; ++ j) {
                 nabla_weights[l][j][i] = nabla_bias[l][i] * activations[l-1][j];
             }
         }

@@ -22,6 +22,7 @@ int main(int argc, char *argv[])
     sizes.push_back(30);
     sizes.push_back(10);
     NetWork mynet(sizes, loader);
-    cout << "done." << endl;
+    cout << "load done." << endl;
+    mynet.SGD(30, 10, 0.1);
     return 0;
 }
