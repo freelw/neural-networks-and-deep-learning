@@ -69,7 +69,7 @@ void NetWork::minus_wb(int batch_cnt, float eta) {
             for (size_t k = 0; k < x; ++ k) {
                 weights[i][j][k] -= eta/batch_cnt*nabla_weights[i][j][k];
             }
-            bias[i][j] -= eta/batch_cnt*nabla_bias[i][j][k];
+            bias[i][j] -= eta/batch_cnt*nabla_bias[i][j];
         }
     }
 }
@@ -152,7 +152,7 @@ void NetWork::sigmoid_prime_array(float *arr, size_t size) {
 }
 
 float NetWork::sigmoid_prime(float z) {
-    return sigmoid(z)*(1-sigmoid(z))
+    return sigmoid(z)*(1-sigmoid(z));
 }
 
 void NetWork::dot(float **w, const std::vector<float> & t, float *tmpv, size_t x, size_t y) {
@@ -197,7 +197,7 @@ void NetWork::SGD(
 }
 
 void NetWork::update_mini_batch(float **p_training_data_x, float **p_training_data_y, size_t offset, int mini_batch_size, size_t len, float eta) {
-    fill0wb(nabla_weights, nabla_bias)
+    fill0wb(nabla_weights, nabla_bias);
     int batch_size = mini_batch_size > len - offset ? len - offset : mini_batch_size;
     int batch_cnt = 0;
     for (size_t i = offset; i < offset + batch_size; ++ i) {
@@ -213,7 +213,7 @@ void NetWork::backprop(float *px, float *py) {
     fill0wb(backprop_nabla_weights, backprop_nabla_bias);
 
     for (size_t i = 0; i < sizes[0]; ++ i) {
-        activation[0][i] = px[i];
+        activations[0][i] = px[i];
     }
 
     for (size_t i = 0; i < num_layers-1; ++ i) {
@@ -221,9 +221,9 @@ void NetWork::backprop(float *px, float *py) {
         size_t y = sizes[i+1];
         std::vector<float> t;
         for (size_t j = 0; j < x; ++ j) {
-            t.push_back(activation[i][j]);
+            t.push_back(activations[i][j]);
         }
-        dot(w[i], t, zs[i], x, y);
+        dot(weights[i], t, zs[i], x, y);
         for (size_t j = 0; j < y; ++ j) {
             zs[i][j]+=bias[i][j];
             activations[i+1][j] = sigmoid(zs[i][j]);
@@ -244,12 +244,27 @@ void NetWork::backprop(float *px, float *py) {
     }
 
     for (int l = num_layers-3; l >= 0; -- l) {
-
-
-
+        size_t x = sizes[l];
+        size_t y = sizes[l+1];
+        for (size_t i = 0; i < y; ++ i) {
+            sp[i] = zs[l][i];
+        }
+        sigmoid_array(sp, y);
+        for (size_t i = 0; i < x; ++ i) {
+            float sum = 0;
+            for (size_t j = 0; j < y; ++ j) {
+                sum += weights[l][j][i] * nabla_bias[l+1][j];
+            }
+            nabla_bias[l][i] = sum * sp[i];
+        }
+        size_t z = sizes[l-1];
+        for (size_t i = 0; i < x; ++ i) {
+            for (size_t j = 0; j < z; ++ j) {
+                nabla_weights[l][j][i] = nabla_bias[l][i] * activations[l-1][j];
+            }
+        }
     }
 }
-
 
 void NetWork::cost_derivative(float *pa, float *py, float *c_d, size_t size) {
     for (size_t i = 0; i < size; ++ i) {
