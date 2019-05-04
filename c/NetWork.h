@@ -48,6 +48,7 @@ public:
     void add_nabla_delta();
     void minus_wb(int batch_cnt, float eta);
     void backprop(float *x, float *y);
+    int evaluate();
     void cost_derivative(float *pa, float *py, float *c_d, size_t size);
 };
 

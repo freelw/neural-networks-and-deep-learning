@@ -2,6 +2,7 @@
 #include "mnist_loader.h"
 #include <math.h>
 #include <stdio.h>
+#include <iostream>
 
 float randfloat() {
     return rand() / 32767.;
@@ -198,7 +199,11 @@ void NetWork::SGD(
         for (size_t offset = 0; offset < loader.training_data_len; offset += mini_batch_size) {
             update_mini_batch(p_training_data_x, p_training_data_y, offset, mini_batch_size, loader.training_data_len, eta);
         }
+
+        int evaluate_cnt = evaluate();
+        std::cout << "Epoch " << j << ": " << evaluate_cnt << " / " << loader.test_data_len << std::endl;
     }
+
 }
 
 void NetWork::update_mini_batch(float **p_training_data_x, float **p_training_data_y, size_t offset, int mini_batch_size, size_t len, float eta) {
@@ -269,6 +274,27 @@ void NetWork::backprop(float *px, float *py) {
             }
         }
     }
+}
+
+int NetWork::evaluate() {
+    int sum = 0;
+    for (size_t i = 0; i < loader.test_data_len; ++ i) {
+        std::vector<float> input;
+        for (size_t j = 0; j < loader.test_data_x_len; ++ j) {
+            input.push_back(loader.test_data_x[i][j]);
+        }
+        std::vector<float> res = feedforward(input);
+        int max_index = 0;
+        for (size_t j = 0; j < res.size(); ++ j) {
+            if (res[j] > res[max_index]) {
+                max_index = j;
+            }    
+        }
+        if (max_index == loader.test_data_y[i]) {
+            ++ sum;
+        }
+    }
+    return sum;
 }
 
 void NetWork::cost_derivative(float *pa, float *py, float *c_d, size_t size) {
