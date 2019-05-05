@@ -7,8 +7,8 @@
 using namespace std;
 
 double randdouble() {
-    return 0;
-    //return rand() * 1. / RAND_MAX - 0.5;
+    //return 0;
+    return rand() * 1. / RAND_MAX - 0.5;
 }
 
 double randinterval(int l, int r) {
