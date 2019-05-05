@@ -31,8 +31,12 @@ class Network(object):
         ever used in computing the outputs from later layers."""
         self.num_layers = len(sizes)
         self.sizes = sizes
-        self.biases = [np.random.randn(y, 1) for y in sizes[1:]]
-        self.weights = [np.random.randn(y, x)
+        #self.biases = [np.random.randn(y, 1) for y in sizes[1:]]
+        #self.weights = [np.random.randn(y, x)
+        #                for x, y in zip(sizes[:-1], sizes[1:])]
+
+        self.biases = [np.zeros((y, 1),) for y in sizes[1:]]
+        self.weights = [np.zeros((y, x),)
                         for x, y in zip(sizes[:-1], sizes[1:])]
 
     def feedforward(self, a):
@@ -53,6 +57,7 @@ class Network(object):
         tracking progress, but slows things down substantially."""
         if test_data: n_test = len(test_data)
         n = len(training_data)
+
         for j in xrange(epochs):
             random.shuffle(training_data)
             mini_batches = [
@@ -65,6 +70,33 @@ class Network(object):
                     j, self.evaluate(test_data), n_test)
             else:
                 print "Epoch {0} complete".format(j)
+    def printwb(self):
+        for i in xrange(self.num_layers-1):
+            x = self.sizes[i]
+            y = self.sizes[i+1]
+            msg = "[%d] w %s " % (i, self.weights[i][0][0])
+            #for j in xrange(y):
+            #    for k in xrange(x):
+            #        msg += "%s " % (self.weights[i][j][k])
+            print msg
+            msg = "[%d] b " % i
+            for j in xrange(y):
+                msg += "%s " % (self.biases[i][j][0])
+            print msg
+    def printnwb(self, nabla_w, nabla_b):
+        for i in xrange(self.num_layers-1):
+            x = self.sizes[i]
+            y = self.sizes[i+1]
+            msg = "[%d] nw %s " % (i, nabla_w[i][0][0])
+            #for j in xrange(y):
+            #    for k in xrange(x):
+            #        msg += "%s " % (self.weights[i][j][k])
+            print msg
+            msg = "[%d] nb " % i
+            for j in xrange(y):
+                msg += "%s " % (nabla_b[i][j][0])
+            print msg
+
 
     def update_mini_batch(self, mini_batch, eta):
         """Update the network's weights and biases by applying
@@ -77,10 +109,12 @@ class Network(object):
             delta_nabla_b, delta_nabla_w = self.backprop(x, y)
             nabla_b = [nb+dnb for nb, dnb in zip(nabla_b, delta_nabla_b)]
             nabla_w = [nw+dnw for nw, dnw in zip(nabla_w, delta_nabla_w)]
+        #self.printnwb(nabla_w, nabla_b)
         self.weights = [w-(eta/len(mini_batch))*nw
                         for w, nw in zip(self.weights, nabla_w)]
         self.biases = [b-(eta/len(mini_batch))*nb
                        for b, nb in zip(self.biases, nabla_b)]
+        #self.printwb()
 
     def backprop(self, x, y):
         """Return a tuple ``(nabla_b, nabla_w)`` representing the

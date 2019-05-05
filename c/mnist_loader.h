@@ -17,9 +17,9 @@ public:
     int training_data_y_len;
     int test_data_len;
     int test_data_x_len;
-    float **training_data_x;
-    float **training_data_y;
-    float **test_data_x;
+    double **training_data_x;
+    double **training_data_y;
+    double **test_data_x;
     int *test_data_y;
 };
 #endif

@@ -9,47 +9,49 @@ class NetWork
 private:
     int num_layers;
     std::vector<int> sizes;
-    float **bias;
-    float ***weights;
-    float **nabla_bias;
-    float ***nabla_weights;
-    float **backprop_nabla_bias;
-    float ***backprop_nabla_weights;
-    float **delta_bias;
-    float ***delta_weights;
+    double **bias;
+    double ***weights;
+    double **nabla_bias;
+    double ***nabla_weights;
+    double **backprop_nabla_bias;
+    double ***backprop_nabla_weights;
+    double **delta_bias;
+    double ***delta_weights;
     int max_size;
-    float *tmpv;
+    double *tmpv;
 
-    float *delta;
-    float *cost_der;
-    float *sp;
-    float *z;
-    float **activations;
-    float **zs;
+    double *delta;
+    double *cost_der;
+    double *sp;
+    double *z;
+    double **activations;
+    double **zs;
     MnistLoader &loader;
 public:
     NetWork(const std::vector<int> &_sizes, MnistLoader &_loader);
     ~NetWork();
-    std::vector<float> feedforward(const std::vector<float> & a);
-    void sigmoid_array(float *arr, size_t size);
-    float sigmoid(float z);
-    void sigmoid_prime_array(float *arr, size_t size);
-    float sigmoid_prime(float z);
-    void dot(float **, const std::vector<float> & t, float *tmpv, size_t x, size_t y);
-    void shuffle(float **p_training_data_x, float **p_training_data_y, size_t len);
+    std::vector<double> feedforward(const std::vector<double> & a);
+    void sigmoid_array(double *arr, size_t size);
+    double sigmoid(double z);
+    void sigmoid_prime_array(double *arr, size_t size);
+    double sigmoid_prime(double z);
+    void dot(double **, const std::vector<double> & t, double *tmpv, size_t x, size_t y);
+    void shuffle(double **p_training_data_x, double **p_training_data_y, size_t len);
     void SGD(
         int epochs,
         int mini_batch_size,
-        float eta
+        double eta
     );
-    void update_mini_batch(float **p_training_data_x, float **p_training_data_y, size_t offset, int mini_batch_size, size_t len, float eta);
-    void initwb(float *** & weights, float ** & bias);
-    void fill0wb(float *** & _weights, float ** & _bias);
+    void update_mini_batch(double **p_training_data_x, double **p_training_data_y, size_t offset, int mini_batch_size, size_t len, double eta);
+    void initwb(double *** & weights, double ** & bias);
+    void fill0wb(double *** & _weights, double ** & _bias);
     void add_nabla_delta();
-    void minus_wb(int batch_cnt, float eta);
-    void backprop(float *x, float *y);
+    void minus_wb(int batch_cnt, double eta);
+    void backprop(double *x, double *y);
     int evaluate();
-    void cost_derivative(float *pa, float *py, float *c_d, size_t size);
+    void cost_derivative(double *pa, double *py, double *c_d, size_t size);
+    void printwb();
+    void printnwb();
 };
 
 
