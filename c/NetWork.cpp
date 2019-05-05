@@ -7,7 +7,8 @@
 using namespace std;
 
 float randfloat() {
-    return rand() * 1. / RAND_MAX;
+    //return 0;
+    return rand() * 1. / RAND_MAX - 0.5;
 }
 
 float randinterval(int l, int r) {
@@ -125,26 +126,42 @@ NetWork::~NetWork() {
 }
 
 std::vector<float> NetWork::feedforward(const std::vector<float> & a) {
-    memset(tmpv, 0, sizeof(float)*max_size);
+    //memset(tmpv, 0, sizeof(float)*max_size);
+    //cout << "feedforward a.size()" << a.size() << endl;
     for (size_t i = 0, len = a.size(); i < len; ++ i) {
         tmpv[i] = a[i];
+        //cout << tmpv[i] << " ";
     }
+    //cout << endl;
+
     for (size_t i = 0; i < num_layers-1; ++ i) {
         size_t x = sizes[i];
         size_t y = sizes[i+1];
+        //cout << "num_layers i x y " << num_layers << " " << i << " " << x << " " << y << endl;
         std::vector<float> t;
+        t.reserve(1024);
+        //cout << "tmpv ";
         for (size_t j = 0; j < x; ++ j) {
             t.push_back(tmpv[j]);
+            //cout << tmpv[j] << " ";
         }
+        //cout << endl;
         dot(weights[i], t, tmpv, x, y);
+        //cout << "tmpv out  ";
         for (size_t j = 0; j < y; ++ j) {
             tmpv[j] += bias[i][j];
+            //cout << tmpv[j] << " ";
         }
+        //cout << endl;
+        sigmoid_array(tmpv, y);
     }
     std::vector<float> ret;
-    for (size_t i = 0, len = sizes[num_layers]; i < len; ++ i) {
+    for (size_t i = 0, len = sizes[num_layers-1]; i < len; ++ i) {
         ret.push_back(tmpv[i]);
+        //cout << tmpv[i] << " ";
     }
+    //cout << endl;
+    //cout << "ret.size() " << ret.size() << endl;
     return ret;
 }
 
@@ -169,13 +186,16 @@ float NetWork::sigmoid_prime(float z) {
 }
 
 void NetWork::dot(float **w, const std::vector<float> & t, float *tmpv, size_t x, size_t y) {
+    //cout << "dot ";
     for (size_t j = 0; j < y; ++ j) {
         float sum = 0;
         for (size_t i = 0; i < x; ++ i) {
             sum += w[j][i] * t[i];
         }
         tmpv[j] = sum;
+        //cout << tmpv[j] << " ";
     }
+    //cout << endl;
 }
 
 void NetWork::shuffle(float **p_training_data_x, float **p_training_data_y, size_t len) {
@@ -237,7 +257,7 @@ void NetWork::update_mini_batch(float **p_training_data_x, float **p_training_da
 }
 
 void NetWork::backprop(float *px, float *py) {
-    fill0wb(backprop_nabla_weights, backprop_nabla_bias);
+    //fill0wb(backprop_nabla_weights, backprop_nabla_bias);
     for (size_t i = 0; i < sizes[0]; ++ i) {
         activations[0][i] = px[i];
     }
@@ -257,38 +277,31 @@ void NetWork::backprop(float *px, float *py) {
     cost_derivative(activations[num_layers-1], py, cost_der, loader.training_data_y_len);
     for (size_t i = 0; i < loader.training_data_y_len; ++ i) {
         cost_der[i] *= sigmoid_prime(zs[num_layers-2][i]);
-        nabla_bias[num_layers-2][i] = cost_der[i];
+        delta_bias[num_layers-2][i] = cost_der[i];
     }
     size_t x = sizes[num_layers-2];
     size_t y = sizes[num_layers-1];
     for (size_t i = 0; i < y; ++ i) {
         for (size_t j = 0; j < x; ++ j) {
-            nabla_weights[num_layers-2][i][j] = cost_der[i]*activations[num_layers-2][j];
+            delta_weights[num_layers-2][i][j] = cost_der[i]*activations[num_layers-2][j];
         }
     }
-    for (int l = num_layers-3; l >= 0; -- l) {
+    for (int l = num_layers-3; l >= 1; -- l) {
         size_t x = sizes[l];
         size_t y = sizes[l+1];
-        size_t z = sizes[l+2];
-        for (size_t i = 0; i < y; ++ i) {
+        for (size_t i = 0; i < x; ++ i) {
             sp[i] = zs[l][i];
         }
-        sigmoid_array(sp, y);
-
+        sigmoid_prime_array(sp, x);
         for (size_t i = 0; i < y; ++ i) {
-            float sum = 0;
-            for (size_t j = 0; j < z; ++ j) {
-                sum += weights[l+1][j][i] * nabla_bias[l+1][j];
+            for (size_t j = 0; j < x; ++ j) {
+                delta_bias[l][j] += weights[l+1][i][j] * delta_bias[l+1][i] * sp[j];
             }
-            nabla_bias[l][i] = sum * sp[i];
         }
-
-
-
-        size_t w = sizes[l-1];
+        size_t z = sizes[l-1];
         for (size_t i = 0; i < x; ++ i) {
-            for (size_t j = 0; j < w; ++ j) {
-                nabla_weights[l][j][i] = nabla_bias[l][i] * activations[l-1][j];
+            for (size_t j = 0; j < z; ++ j) {
+                delta_weights[l][i][j] = delta_bias[l][i] * activations[l-1][j];
             }
         }
     }
@@ -296,12 +309,16 @@ void NetWork::backprop(float *px, float *py) {
 
 int NetWork::evaluate() {
     int sum = 0;
+    cout << "loader.test_data_len : " << loader.test_data_len << endl;
     for (size_t i = 0; i < loader.test_data_len; ++ i) {
+        cout << "i : " << i << " sum : " << sum <<endl;
         std::vector<float> input;
         for (size_t j = 0; j < loader.test_data_x_len; ++ j) {
             input.push_back(loader.test_data_x[i][j]);
         }
+        //cout << "before feedforward" << endl;
         std::vector<float> res = feedforward(input);
+        //cout << "after feedforward" << endl;
         int max_index = 0;
         for (size_t j = 0; j < res.size(); ++ j) {
             if (res[j] > res[max_index]) {
