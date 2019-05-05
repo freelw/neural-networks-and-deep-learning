@@ -309,9 +309,9 @@ void NetWork::backprop(float *px, float *py) {
 
 int NetWork::evaluate() {
     int sum = 0;
-    cout << "loader.test_data_len : " << loader.test_data_len << endl;
+    //cout << "loader.test_data_len : " << loader.test_data_len << endl;
     for (size_t i = 0; i < loader.test_data_len; ++ i) {
-        cout << "i : " << i << " sum : " << sum <<endl;
+        //cout << "i : " << i << " sum : " << sum <<endl;
         std::vector<float> input;
         for (size_t j = 0; j < loader.test_data_x_len; ++ j) {
             input.push_back(loader.test_data_x[i][j]);

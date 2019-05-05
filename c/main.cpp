@@ -23,6 +23,6 @@ int main(int argc, char *argv[])
     sizes.push_back(10);
     NetWork mynet(sizes, loader);
     cout << "load done." << endl;
-    mynet.SGD(30, 10, 0.1);
+    mynet.SGD(30, 10, 3.0);
     return 0;
 }
