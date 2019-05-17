@@ -8,6 +8,6 @@ with open('./model/restore_test.pb', 'rb') as f:
     graph_def = tf.GraphDef()
     graph_def.ParseFromString(f.read())
     print graph_def
-    [accuracy] = tf.import_graph_def(graph_def, input_map={'input_x': x, 'input_y': y_}, return_elements=['accuracy:0'])
+    [accuracy, answer, W] = tf.import_graph_def(graph_def, input_map={'input_x': x, 'input_y': y_}, return_elements=['accuracy:0', 'answer:0', 'W:0'])
 with tf.Session() as sess:
-    print sess.run(accuracy, feed_dict={x:mnist.test.images, y_:mnist.test.labels})
+    print sess.run([W, answer, accuracy], feed_dict={x:mnist.test.images[0:10], y_:mnist.test.labels[0:10]})
