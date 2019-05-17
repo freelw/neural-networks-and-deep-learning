@@ -38,7 +38,7 @@ ICudaEngine* initEngine() {
     auto parser = createUffParser();
     parser->registerInput("input_x", Dims3(1, 1, 784), UffInputOrder::kNCHW);
     parser->registerOutput("output_y");
-    if (!parser->parse("./restore_test.uff", *network, nvinfer1::DataType::kFLOAT)) {
+    if (!parser->parse("../restore_test.uff", *network, nvinfer1::DataType::kFLOAT)) {
         std::cerr << "Failure while parsing UFF file" << std::endl;
         exit(-1);
     } else {
