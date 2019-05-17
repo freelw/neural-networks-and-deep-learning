@@ -1,0 +1,10 @@
+cmake_minimum_required (VERSION 2.8)
+set (CMAKE_CXX_STANDARD 11)
+set (CMAKE_CXX_FLAGS "-D_REENTRANT")
+project (trt_test)
+aux_source_directory(. DIR_SRCS)
+include_directories(/usr/local/cuda/include ./include)
+link_directories(/usr/local/cuda/lib64 ./lib)
+add_executable(trt_test ${DIR_SRCS})
+target_link_libraries(trt_test nvinfer nvparsers nvinfer_plugin nvonnxparser cudnn cublas cudart rt dl pthread)
+
