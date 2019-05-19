@@ -7,7 +7,6 @@
 using namespace std;
 
 double randdouble() {
-    //return 0;
     return rand() * 1. / RAND_MAX - 0.5;
 }
 
@@ -21,7 +20,6 @@ void NetWork::initwb(double *** & _weights, double ** & _bias) {
     for (size_t i = 0; i < num_layers-1; ++ i) {
         size_t x = sizes[i];
         size_t y = sizes[i+1];
-        //cout << "initwb  y : " << y << endl;
         _bias[i] = new double[y];
         for (size_t j = 0; j < y; ++ j) {
             _bias[i][j] = randdouble();
@@ -55,15 +53,11 @@ void NetWork::add_nabla_delta() {
     for (size_t i = 0; i < num_layers-1; ++ i) {
         size_t x = sizes[i];
         size_t y = sizes[i+1];
-        //cout << "i x y : " << i << " " << x << " " << y << endl;
         for (size_t j = 0; j < y; ++ j) {
-            //cout << "i j: " << i << " " << j << endl;
-            //cout << "nabla_bias[i][j] delta_bias[i][j] " << nabla_bias[i][j] << " " << delta_bias[i][j] << endl;
             nabla_bias[i][j] += delta_bias[i][j];
         }
         for (size_t j = 0; j < y; ++ j) {
             for (size_t k = 0; k < x; ++ k) {
-                //cout << "i x k : " << i << " " << x << " " << k << endl;
                 nabla_weights[i][j][k] += delta_weights[i][j][k];
             }
         }
@@ -224,9 +218,7 @@ void NetWork::update_mini_batch(double **p_training_data_x, double **p_training_
         backprop(p_training_data_x[i], p_training_data_y[i]);
         add_nabla_delta();
     }
-    //printnwb();
     minus_wb(batch_cnt, eta);
-    //printwb();
 }
 
 void NetWork::backprop(double *px, double *py) {
@@ -259,16 +251,13 @@ void NetWork::backprop(double *px, double *py) {
         }
     }
     for (int l = num_layers-3; l >= 0; -- l) {
-        //cout << "bpbp" << endl;
         size_t x = sizes[l];
         size_t y = sizes[l+1];
         size_t z = sizes[l+2];
-        //cout << "l x y z " << l << " " << x << " " << y << " " << z << endl;
         for (size_t i = 0; i < x; ++ i) {
             sp[i] = zs[l][i];
         }
         sigmoid_prime_array(sp, x);
-        //cout << "sigmoid_prime_array done." << endl;
         for (size_t i = 0; i < y; ++ i) {
             for (size_t j = 0; j < z; ++ j) {
                 delta_bias[l][i] += weights[l+1][j][i] * delta_bias[l+1][j] * sp[i];
