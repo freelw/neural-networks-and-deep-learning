@@ -20,8 +20,8 @@ with tf.Session() as sess:
     answer = tf.argmax(y, 1, name='answer')
     correct_prediction = tf.equal(answer, tf.argmax(y_, 1), name='correct')
     accuracy = tf.reduce_mean(tf.cast(correct_prediction, tf.float32), name='accuracy')
-    output_graph_def = tf.graph_util.convert_variables_to_constants(sess, sess.graph_def, output_node_names=['accuracy'])
+    output_graph_def = tf.graph_util.convert_variables_to_constants(sess, sess.graph_def, output_node_names=['output_y', 'accuracy'])
     with tf.gfile.FastGFile('model/restore_test.pb', mode='wb') as f:
             f.write(output_graph_def.SerializeToString())
-    print (sess.run([y, accuracy], feed_dict={x:mnist.test.images, y_:mnist.test.labels}))
+    print (sess.run(accuracy, feed_dict={x:mnist.test.images, y_:mnist.test.labels}))
 #print y.eval()
