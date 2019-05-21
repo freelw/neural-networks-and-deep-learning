@@ -67,7 +67,7 @@ public:
             std::cout << std::endl;
         }
 
-        return Dims3(10, 1, 1);
+        return Dims3(1, 1, 10);
     }
 
     bool supportsFormat(DataType type, PluginFormat format) const override { return true; };
@@ -121,11 +121,9 @@ public:
     }
 };
 
-// integration for serialization
 class PluginFactory : public nvuffparser::IPluginFactoryExt
 {
 public:
-    // caffe parser plugin implementation
     bool isPlugin(const char* name) override
     {
         return isPluginExt(name);
@@ -140,36 +138,7 @@ public:
     {
         return new MyPlugin();
     }
-
-   // virtual nvinfer1::IPlugin* createPlugin(const char* layerName, const nvinfer1::Weights* weights, int nbWeights) override
-   // {
-   //     // there's no way to pass parameters through from the model definition, so we have to define it here explicitly
-   //     static const int NB_OUTPUT_CHANNELS = 10;
-   //     assert(isPlugin(layerName) && nbWeights == 2);
-   //     assert(mPlugin.get() == nullptr);
-   //     mPlugin = std::unique_ptr<FCPlugin>(new FCPlugin(weights, nbWeights, NB_OUTPUT_CHANNELS));
-   //     return mPlugin.get();
-   // }
-
-   // // deserialization plugin implementation
-   // IPlugin* createPlugin(const char* layerName, const void* serialData, size_t serialLength) override
-   // {
-   //     assert(isPlugin(layerName));
-   //     //This plugin object is destroyed when engine is destroyed by calling
-   //     //IPluginExt::destroy()
-   //     return new FCPlugin(serialData, serialLength);
-   // }
-
-   // // User application destroys plugin when it is safe to do so.
-   // // Should be done after consumers of plugin (like ICudaEngine) are destroyed.
-   // void destroyPlugin()
-   // {
-   //     mPlugin.reset();
-   // }
-
-   // std::unique_ptr<FCPlugin> mPlugin{nullptr};
 };
-
 
 ICudaEngine* initEngine() {
     PluginFactory pluginFactory;
