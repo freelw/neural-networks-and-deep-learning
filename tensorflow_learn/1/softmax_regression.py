@@ -11,12 +11,18 @@ b = tf.Variable(tf.zeros([10]), name='b')
 y = tf.nn.softmax(tf.matmul(x, W) + b, name='output_y')
 y_ = tf.placeholder(tf.float32, [None, 10], name='input_y')
 cross_entropy = tf.reduce_mean(-tf.reduce_sum(y_*tf.log(y)))
+tf.summary.scalar('cross_entropy', cross_entropy)
 train_step = tf.train.GradientDescentOptimizer(0.01).minimize(cross_entropy)
 with tf.Session() as sess:
+    merged = tf.summary.merge_all()
+    train_writer = tf.summary.FileWriter('/data/share/neural-networks-and-deep-learning/tensorflow_learn/1/train',
+                                      sess.graph)
     tf.global_variables_initializer().run()
-    for _ in xrange(1000):
+    for i in xrange(1000):
         batch_xs, batch_ys = mnist.train.next_batch(100)
-        sess.run(train_step, feed_dict={x:batch_xs, y_:batch_ys})
+        _, summary = sess.run([train_step, merged], feed_dict={x:batch_xs, y_:batch_ys})
+        train_writer.add_summary(summary, i)
+
     answer = tf.argmax(y, 1, name='answer')
     correct_prediction = tf.equal(answer, tf.argmax(y_, 1), name='correct')
     accuracy = tf.reduce_mean(tf.cast(correct_prediction, tf.float32), name='accuracy')
@@ -24,4 +30,3 @@ with tf.Session() as sess:
     with tf.gfile.FastGFile('model/restore_test.pb', mode='wb') as f:
             f.write(output_graph_def.SerializeToString())
     print (sess.run(accuracy, feed_dict={x:mnist.test.images, y_:mnist.test.labels}))
-#print y.eval()
