@@ -1,7 +1,9 @@
 #include "mnist_loader.h"
+#include "mnist_loader_v2.h"
 #include "network.h"
 #include <iostream>
 #include <vector>
+
 
 using namespace std;
 int main(int argc, char *argv[])
@@ -23,7 +25,7 @@ int main(int argc, char *argv[])
     sizes.push_back(784);
     sizes.push_back(30);
     sizes.push_back(10);
-    NetWork mynet(sizes, loader);
+    NetWork<MnistLoaderV2> mynet(sizes, loader);
     //cout << "load done." << endl;
     mynet.SGD(30, 10, 3.0);
     return 0;

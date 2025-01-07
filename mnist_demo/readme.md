@@ -1,0 +1,1 @@
+[mnist layout](!https://yann.lecun.com/exdb/mnist/)
