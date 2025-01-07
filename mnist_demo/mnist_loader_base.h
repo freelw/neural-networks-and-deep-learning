@@ -8,13 +8,15 @@ class MnistLoaderBase {
 public:
     MnistLoaderBase() {}
     ~MnistLoaderBase() {}
-    const std::vector<std::vector<int>> & getTrainImages();
-    const std::vector<int> & getTrainLabels();
+    const std::vector<std::vector<unsigned char>> & getTrainImages();
+    const std::vector<unsigned char> & getTrainLabels();
+
+    void load();
 
 private:
 
-    std::vector<std::vector<int>> train_images;
-    std::vector<int> train_labels;
+    std::vector<std::vector<unsigned char>> train_images;
+    std::vector<unsigned char> train_labels;
 
 
 };
