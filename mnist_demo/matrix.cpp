@@ -17,6 +17,10 @@ Matrix& Matrix::zero() {
 }
 
 ostream &operator<<(ostream &output, const Matrix &m) {
+    if (!m.initialized) {
+        output << "matrix not initialized." << endl;
+        return output;
+    }
     output << "[";
     for (auto i = 0; i < m.shape.rowCnt; ++ i) {
         if (i > 0) {
