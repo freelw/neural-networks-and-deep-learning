@@ -3,7 +3,8 @@
 #include <iostream>
 #include <fstream>
 
-void MnistLoader::load_data(const std::string & file_name) {
+void MnistLoader::load_data() {
+    const std::string file_name = "/workspaces/neural-networks-and-deep-learning/src/mnist.dump";
     std::ifstream ifs(file_name.c_str());
     ifs >> training_data_len >> training_data_x_len >> training_data_y_len;
     training_data_x = new double* [training_data_len];

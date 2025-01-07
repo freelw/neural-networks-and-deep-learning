@@ -10,7 +10,7 @@ public:
     MnistLoader() {}
     ~MnistLoader() {}
 
-    void load_data(const std::string & file_name);
+    void load_data();
 public:
     int training_data_len;
     int training_data_x_len;
