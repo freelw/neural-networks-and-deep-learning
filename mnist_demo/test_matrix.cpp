@@ -48,14 +48,16 @@ void test3() {
 }
 
 void test4() {
-    // operator +
+    // operator -
     cout << "test operator - start ... " << endl;
-    Matrix c(Shape(4,3));
+    Matrix c(Shape(4,3)), d(Shape(4,3));
     c.setAll(2);
+    d.setAll(1);
     cout << c << endl;
     cout << c - 1 << endl;
     cout << -c << endl;
     cout << 1 - c << endl;
+    cout << c - d << endl;
     cout << "test operator - end ... " << endl;
 }
 

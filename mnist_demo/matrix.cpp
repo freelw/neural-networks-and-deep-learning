@@ -34,7 +34,7 @@ ostream &operator<<(ostream &output, const Matrix &m) {
     return output;
 }
 
-Matrix Matrix::operator+(const Matrix &m) {
+Matrix Matrix::operator+(const Matrix &m) const{
     Matrix res(*this);
     for (auto i = 0; i < shape.rowCnt; ++i) {
         for (auto j = 0; j < shape.colCnt; ++j) {
@@ -44,7 +44,7 @@ Matrix Matrix::operator+(const Matrix &m) {
     return res;
 }
 
-Matrix Matrix::operator+(int dt) {
+Matrix Matrix::operator+(int dt) const{
     Matrix res(*this);
     for (auto i = 0; i < shape.rowCnt; ++i) {
         for (auto j = 0; j < shape.colCnt; ++j) {
@@ -54,7 +54,7 @@ Matrix Matrix::operator+(int dt) {
     return res;
 }
 
-Matrix Matrix::operator-(int dt) {
+Matrix Matrix::operator-(int dt) const{
     Matrix res(*this);
     for (auto i = 0; i < shape.rowCnt; ++i) {
         for (auto j = 0; j < shape.colCnt; ++j) {
@@ -64,7 +64,7 @@ Matrix Matrix::operator-(int dt) {
     return res;
 }
 
-Matrix Matrix::operator-() {
+Matrix Matrix::operator-() const{
     Matrix res(*this);
     for (auto i = 0; i < shape.rowCnt; ++i) {
         for (auto j = 0; j < shape.colCnt; ++j) {
@@ -84,7 +84,17 @@ Matrix operator-(int v, const Matrix &m) {
     return res;
 }
 
-Matrix Matrix::operator*(const Matrix &m) {
+Matrix Matrix::operator-(const Matrix &m) const{
+    Matrix res(*this);
+    for (auto i = 0; i < shape.rowCnt; ++i) {
+        for (auto j = 0; j < shape.colCnt; ++j) {
+            res.data[i][j] -= m.data[i][j];
+        }
+    }
+    return res;
+}
+
+Matrix Matrix::operator*(const Matrix &m) const{
     Matrix res(*this);
     for (auto i = 0; i < shape.rowCnt; ++i) {
         for (auto j = 0; j < shape.colCnt; ++j) {

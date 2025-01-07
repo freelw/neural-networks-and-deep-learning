@@ -22,11 +22,12 @@ public:
     Matrix(const Matrix &m);
     Matrix& zero();
     friend ostream &operator<<(ostream &output, const Matrix &m);
-    Matrix operator+(const Matrix &m);
-    Matrix operator+(int dt);
-    Matrix operator-(int dt);
-    Matrix operator-();
-    Matrix operator*(const Matrix &m);
+    Matrix operator+(const Matrix &m) const;
+    Matrix operator+(int dt) const;
+    Matrix operator-(int dt) const;
+    Matrix operator-() const;
+    Matrix operator-(const Matrix &m) const;
+    Matrix operator*(const Matrix &m) const;
     friend Matrix operator-(int, const Matrix &m);
     std::vector<double>& operator[](unsigned int index);
     Matrix& setAll(double v);

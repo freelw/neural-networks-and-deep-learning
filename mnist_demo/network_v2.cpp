@@ -84,3 +84,59 @@ void NetWork::SGD(
         std::cout << "Epoch " <<  e << " complete." << std::endl;
     }   
 }
+
+void NetWork::update_mini_batch(
+    std::vector<TrainingData*> &mini_batch,
+    double eta) {
+    std::vector<Matrix> nabla_b;
+    std::vector<Matrix> nabla_w;
+
+    for (auto i = 0; i < biases.size(); ++ i) {
+        nabla_b.emplace_back(Matrix(biases[i].getShape()));
+    }
+
+    for (auto i = 0; i < weights.size(); ++ i) {
+        nabla_w.emplace_back(Matrix(weights[i].getShape()));
+    }
+
+    for (auto i = 0; i < mini_batch.size(); ++ i) {
+
+    }
+}
+
+
+void NetWork::backprop(
+    Matrix &x, Matrix &y,
+    std::vector<Matrix> &delta_nabla_b,
+    std::vector<Matrix> &delta_nabla_w) {
+    
+    for (auto i = 0; i < biases.size(); ++ i) {
+        delta_nabla_b.emplace_back(Matrix(biases[i].getShape()));
+    }
+
+    for (auto i = 0; i < weights.size(); ++ i) {
+        delta_nabla_w.emplace_back(Matrix(weights[i].getShape()));
+    }
+
+    Matrix activation(x);
+
+    std::vector<Matrix> activations;
+    activations.emplace_back(activation);
+    std::vector<Matrix> zs;
+    for (auto i = 0; i < biases.size(); ++ i) {
+        Matrix z = weights[i].dot(activation) + biases[i];
+        zs.emplace_back(z);
+        activation = sigmoid(z);
+        activations.emplace_back(activation);
+    }
+    
+    Matrix delta = cost_derivative(activations[activations.size()-1], y) * sigmoid_prime(zs[zs.size()-1]);
+
+}
+
+Matrix NetWork::cost_derivative(
+    const Matrix &output_activations,
+    const Matrix &y) {
+    //return output_activations - y;
+    return y;
+}

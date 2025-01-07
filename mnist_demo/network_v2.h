@@ -17,6 +17,9 @@ public:
     NetWork(const std::vector<int> &_sizes);
     Matrix feedforward(const Matrix &a);
     void SGD(std::vector<TrainingData*> &v_training_data, int epochs, int mini_batch_size, double eta);
+    void update_mini_batch(std::vector<TrainingData*> &mini_batch, double eta);
+    void backprop(Matrix &x, Matrix &y, std::vector<Matrix> &delta_nabla_b, std::vector<Matrix> &delta_nabla_w);
+    Matrix cost_derivative(const Matrix &output_activations, const Matrix &y);
 
 private:
     std::vector<int> sizes;
