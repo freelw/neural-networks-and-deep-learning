@@ -1,19 +1,14 @@
 #include "matrix.h"
 
 
+Matrix::Matrix(const Matrix &m):
+    shape(m.shape),
+    initialized(m.initialized),
+    data(m.data) {
+}
+
 Matrix& Matrix::zero() {
-    if (!initialized) {
-        data.clear();
-        for (auto i = 0; i < shape.rowCnt; ++i) {
-            std::vector<double> tmp;
-            for (auto j = 0; j < shape.colCnt; ++j) {
-                tmp.emplace_back(0);
-            }
-            data.emplace_back(tmp);
-        }
-    }
-    initialized = true;
-    return *this;
+    return setAll(0);
 }
 
 ostream &operator<<(ostream &output, const Matrix &m) {
@@ -37,4 +32,27 @@ ostream &operator<<(ostream &output, const Matrix &m) {
     }
     output << "]" << endl;
     return output;
+}
+
+Matrix Matrix::operator+(const Matrix &m) {
+    Matrix res(*this);
+    for (auto i = 0; i < shape.rowCnt; ++i) {
+        for (auto j = 0; j < shape.colCnt; ++j) {
+            res.data[i][j] += m.data[i][j];
+        }
+    }
+    return res;
+}
+
+Matrix& Matrix::setAll(double v) {
+    data.clear();
+    for (auto i = 0; i < shape.rowCnt; ++i) {
+        std::vector<double> tmp;
+        for (auto j = 0; j < shape.colCnt; ++j) {
+            tmp.emplace_back(v);
+        }
+        data.emplace_back(tmp);
+    }
+    initialized = true;
+    return *this;
 }

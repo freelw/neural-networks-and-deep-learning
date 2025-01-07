@@ -19,8 +19,11 @@ public:
         : initialized(false),
         shape(_shape) {}
 
+    Matrix(const Matrix &m);
     Matrix& zero();
     friend ostream &operator<<(ostream &output, const Matrix &m );
+    Matrix operator+(const Matrix &m);
+    Matrix& setAll(double v);
 
 private:
     bool initialized;
