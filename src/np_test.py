@@ -17,6 +17,10 @@ class Network(object):
         for b, w in zip(self.biases, self.weights):
             a = np.dot(w, a)+b
         return a
+    
+def sigmoid(z):
+    """The sigmoid function."""
+    return 1.0/(1.0+np.exp(-z))
 
 if '__main__' == __name__:
     #net = Network([3, 5, 2])
@@ -36,4 +40,4 @@ if '__main__' == __name__:
     y[1][2] = 7
     print x
     print y
-    print np.dot(y, x)
+    print sigmoid(-np.dot(y, x))
