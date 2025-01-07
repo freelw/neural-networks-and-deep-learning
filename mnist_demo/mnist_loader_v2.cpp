@@ -34,4 +34,18 @@ void MnistLoaderV2::load_data() {
             }
         }
     }
+
+    test_data_x = new double* [test_data_len];
+    test_data_y = new int [test_data_len];
+    for (size_t i = 0; i < test_data_len; ++ i) {
+        test_data_x[i] = new double [test_data_x_len];
+    }
+    for (size_t i = 0; i < test_data_len; ++ i) {
+        for (size_t j = 0; j < test_data_x_len; ++ j) {
+            test_data_x[i][j] = trainImages[i+TRAIN_IMAGES_NUM][j]*1./256;
+        }
+        for (size_t j = 0; j < training_data_y_len; ++ j) {
+            test_data_y[i] = trainLabels[i+TRAIN_IMAGES_NUM];
+        }
+    }
 }

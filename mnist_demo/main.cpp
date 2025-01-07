@@ -8,10 +8,6 @@
 using namespace std;
 int main(int argc, char *argv[])
 {
-    if (argc <= 1) {
-        cout << "too few args" << endl;
-        return -1;
-    }
     // MnistLoader loader;
     // loader.load_data(argv[1]);
     MnistLoaderV2 loader;

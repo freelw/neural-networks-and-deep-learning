@@ -18,6 +18,7 @@ void check_eq_double(double a, double b) {
         std::cerr << "check_eq_double failed " << a << " != " << b << std::endl;
     }
 }
+
 void check_eq(MnistLoader &loader1, MnistLoaderV2 &loader2)
 {
     check_eq_int(loader1.training_data_len, loader2.training_data_len);
@@ -26,15 +27,21 @@ void check_eq(MnistLoader &loader1, MnistLoaderV2 &loader2)
     check_eq_int(loader1.test_data_len, loader2.test_data_len);
     check_eq_int(loader1.test_data_x_len, loader2.test_data_x_len);
 
-
-     for (size_t i = 0; i < loader1.training_data_len; ++ i) {
+    for (size_t i = 0; i < loader1.training_data_len; ++ i) {
         for (size_t j = 0; j < loader1.training_data_x_len; ++ j) {
             check_eq_double(loader1.training_data_x[i][j], loader2.training_data_x[i][j]);
         }
         for (size_t j = 0; j < loader1.training_data_y_len; ++ j) {
             check_eq_double(loader1.training_data_y[i][j], loader2.training_data_y[i][j]);
         }
-     }
+    }
+
+    for (size_t i = 0; i < loader1.test_data_len; ++ i) {
+        for (size_t j = 0; j < loader1.test_data_x_len; ++ j) {
+            check_eq_double(loader1.test_data_x[i][j], loader2.test_data_x[i][j]);
+        }
+        check_eq_int(loader1.test_data_y[i], loader2.test_data_y[i]);
+    }
 }
 int main(int argc, char *argv[])
 {
