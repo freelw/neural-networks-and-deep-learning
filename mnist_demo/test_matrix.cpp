@@ -105,6 +105,21 @@ void test6() {
     cout << "test sigmoid prime end ... " << endl;
 }
 
+void test7() {
+    //network base
+    cout << "test network base start ... " << endl;
+    vector<int> sizes;
+    sizes.push_back(3);
+    sizes.push_back(5);
+    sizes.push_back(2);
+    NetWork mynet(sizes);
+    Matrix x(Shape(3, 1));
+    x.zero();
+    cout << mynet.feedforward(x) << endl;
+
+    cout << "test network base end ... " << endl;
+}
+
 int main() {
     test1();
     test2();
@@ -112,5 +127,6 @@ int main() {
     test4();
     test5();
     test6();
+    test7();
     return 0;
 }

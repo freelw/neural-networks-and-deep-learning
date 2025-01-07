@@ -115,7 +115,6 @@ Shape Matrix::getShape() {
     return shape;
 }
 
-
 Matrix Matrix::dot(Matrix &m) {
     Matrix res(Shape(shape.rowCnt, m.shape.colCnt));
     res.zero();

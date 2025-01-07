@@ -15,7 +15,7 @@ class Network(object):
     def feedforward(self, a):
         """Return the output of the network if ``a`` is input."""
         for b, w in zip(self.biases, self.weights):
-            a = np.dot(w, a)+b
+            a = sigmoid(np.dot(w, a)+b)
         return a
     
 def sigmoid(z):
@@ -25,9 +25,7 @@ def sigmoid(z):
 def sigmoid_prime(z):
     """Derivative of the sigmoid function."""
     return sigmoid(z)*(1-sigmoid(z))
-
-if '__main__' == __name__:
-    #net = Network([3, 5, 2])
+def test0():
     x = np.zeros((3,2), )
     y = np.zeros((2,3), )
     x[0][0] = 1
@@ -45,3 +43,12 @@ if '__main__' == __name__:
     print x
     print y
     print sigmoid_prime(-np.dot(y, x))
+
+def testfeedforword():
+    net = Network([3, 5, 2])
+    print net.feedforward(np.zeros((3,1), ))
+
+if '__main__' == __name__:
+    
+    test0()
+    testfeedforword()
