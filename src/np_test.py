@@ -19,9 +19,21 @@ class Network(object):
         return a
 
 if '__main__' == __name__:
-    net = Network([3, 5, 2])
-    x = np.zeros((3,1), )
-    print 'xxxxx'
+    #net = Network([3, 5, 2])
+    x = np.zeros((3,2), )
+    y = np.zeros((2,3), )
+    x[0][0] = 1
+    x[1][0] = 2
+    x[2][0] = 3
+    x[0][1] = 6
+    x[1][1] = 6
+    x[2][1] = 6
+    y[0][0] = 4
+    y[0][1] = 5
+    y[0][2] = 6
+    y[1][0] = 7
+    y[1][1] = 7
+    y[1][2] = 7
     print x
-    print x.shape
-    print net.feedforward(x)
+    print y
+    print np.dot(y, x)

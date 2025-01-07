@@ -23,7 +23,10 @@ public:
     Matrix& zero();
     friend ostream &operator<<(ostream &output, const Matrix &m );
     Matrix operator+(const Matrix &m);
+    std::vector<double>& operator[](unsigned int index);
     Matrix& setAll(double v);
+    Shape getShape();
+    Matrix dot(Matrix &m);
 
 private:
     bool initialized;
