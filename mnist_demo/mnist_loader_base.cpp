@@ -5,9 +5,6 @@
 
 #define RESOURCE_BASE "/workspaces/neural-networks-and-deep-learning/mnist_demo/resources/"
 #define IMAGES_PATH RESOURCE_BASE"train-images-idx3-ubyte"
-#define EXPECTED_IMAGES_NUM 60000
-#define TRAIN_IMAGES_NUM 50000
-#define TEST_IMAGES_NUM 10000
 
 const std::vector<std::vector<unsigned char>> & MnistLoaderBase::getTrainImages() {
     return train_images;
@@ -50,8 +47,13 @@ void MnistLoaderBase::load() {
         std::vector<unsigned char> tmp;
         tmp.reserve(rows_num*cols_num);
         unsigned char * start = p + pos;
-        tmp.emplace_back(start[i]);
-        pos += rows_num*cols_num;
+        for (auto j = 0; j < rows_num*cols_num; ++ j) {
+            tmp.emplace_back(start[j]);
+        }
         train_images.emplace_back(tmp);
+        // std::cout << "tmp size : " << tmp.size() << std::endl;
+        pos += rows_num*cols_num;
     }
+    std::cout << "train_images size : " << train_images.size() << std::endl;
+    std::cout << "train_images[0] size : " << train_images[0].size() << std::endl;
 }
