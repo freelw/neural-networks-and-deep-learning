@@ -61,10 +61,26 @@ Matrix NetWork::feedforward(const Matrix &a) {
 }
 
 void NetWork::SGD(
-    std::vector<TrainingData> &v_training_data,
+    std::vector<TrainingData*> &v_training_data,
     int epochs, int mini_batch_size, double eta) {
 
-    auto rng = std::default_random_engine {};
-    std::shuffle(std::begin(v_training_data), std::end(v_training_data), rng);
-    
+    int n = v_training_data.size();
+    for (auto e = 0; e < epochs; ++ e) {
+        auto rng = std::default_random_engine {};
+        std::shuffle(std::begin(v_training_data), std::end(v_training_data), rng);
+
+        std::vector<std::vector<TrainingData*>> mini_batches;
+        for (auto i = 0; i < n; i += mini_batch_size) {
+            std::vector<TrainingData*> tmp;
+            auto end = min(i+mini_batch_size, n);
+            tmp.assign(v_training_data.begin()+i,v_training_data.begin()+end);
+            mini_batches.emplace_back(tmp);
+        }
+
+        for (auto i = 0; i < mini_batches.size(); ++ i) {
+
+        }
+
+        std::cout << "Epoch " <<  e << " complete." << std::endl;
+    }   
 }

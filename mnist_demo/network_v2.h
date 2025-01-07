@@ -16,7 +16,7 @@ class NetWork {
 public:
     NetWork(const std::vector<int> &_sizes);
     Matrix feedforward(const Matrix &a);
-    void SGD(std::vector<TrainingData> &v_training_data, int epochs, int mini_batch_size, double eta);
+    void SGD(std::vector<TrainingData*> &v_training_data, int epochs, int mini_batch_size, double eta);
 
 private:
     std::vector<int> sizes;
