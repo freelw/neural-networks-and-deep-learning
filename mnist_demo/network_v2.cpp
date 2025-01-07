@@ -4,6 +4,22 @@
 
 #include <iostream>
 
+#include <algorithm>
+#include <random>
+
+
+class TrainingData {
+public:
+    TrainingData(int, int);
+    Matrix x;
+    int y;
+};
+
+TrainingData::TrainingData(int input_layer_size, int _y)
+    : x(Shape(input_layer_size, 1)), y(_y) {
+    x.zero();
+}
+
 double sigmoid_double(double z) {
     double ret = 1./(1.+exp(-z));
     // std::cout << "z : " << z << std::endl;
@@ -42,4 +58,13 @@ Matrix NetWork::feedforward(const Matrix &a) {
         res = sigmoid(weights[i].dot(res) + biases[i]);
     }
     return res;
+}
+
+void NetWork::SGD(
+    std::vector<TrainingData> &v_training_data,
+    int epochs, int mini_batch_size, double eta) {
+
+    auto rng = std::default_random_engine {};
+    std::shuffle(std::begin(v_training_data), std::end(v_training_data), rng);
+    
 }

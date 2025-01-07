@@ -116,7 +116,6 @@ void test7() {
     Matrix x(Shape(3, 1));
     x.zero();
     cout << mynet.feedforward(x) << endl;
-
     cout << "test network base end ... " << endl;
 }
 
