@@ -2,6 +2,10 @@
 #define NETWORK_H
 
 #include <vector>
+#include <math.h>
+#include <iostream>
+
+using namespace std;
 
 template <class Loader>
 class NetWork 
@@ -55,13 +59,11 @@ public:
 };
 
 
-#include "network.h"
-#include "mnist_loader.h"
-#include <math.h>
-#include <stdio.h>
-#include <iostream>
+// #include "network.h"
+// #include "mnist_loader.h"
 
-using namespace std;
+// #include <stdio.h>
+
 
 double randdouble() {
     return rand() * 1. / RAND_MAX - 0.5;
