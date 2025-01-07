@@ -22,6 +22,10 @@ def sigmoid(z):
     """The sigmoid function."""
     return 1.0/(1.0+np.exp(-z))
 
+def sigmoid_prime(z):
+    """Derivative of the sigmoid function."""
+    return sigmoid(z)*(1-sigmoid(z))
+
 if '__main__' == __name__:
     #net = Network([3, 5, 2])
     x = np.zeros((3,2), )
@@ -40,4 +44,4 @@ if '__main__' == __name__:
     y[1][2] = 7
     print x
     print y
-    print sigmoid(-np.dot(y, x))
+    print sigmoid_prime(-np.dot(y, x))

@@ -21,3 +21,7 @@ Matrix sigmoid(Matrix m) {
     }
     return res;
 }
+
+Matrix sigmoid_prime(Matrix m) {
+    return sigmoid(m)*(1-sigmoid(m));
+}

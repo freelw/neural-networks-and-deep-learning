@@ -60,7 +60,7 @@ void test4() {
 }
 
 void test5() {
-    // dot
+    // sigmoid
     cout << "test sigmoid start ... " << endl;
     Matrix x(Shape(3,2)), y(Shape(2, 3));
     x.zero();
@@ -82,11 +82,35 @@ void test5() {
     cout << "test sigmoid end ... " << endl;
 }
 
+void test6() {
+    // sigmoid prime
+    cout << "test sigmoid start ... " << endl;
+    Matrix x(Shape(3,2)), y(Shape(2, 3));
+    x.zero();
+    y.zero();
+    x[0][0] = 1;
+    x[1][0] = 2;
+    x[2][0] = 3;
+    x[0][1] = 6;
+    x[1][1] = 6;
+    x[2][1] = 6;
+    y[0][0] = 4;
+    y[0][1] = 5;
+    y[0][2] = 6;
+    y[1][0] = 7;
+    y[1][1] = 7;
+    y[1][2] = 7;
+    cout << -y.dot(x) << endl;
+    cout << sigmoid_prime(-y.dot(x)) << endl;
+    cout << "test sigmoid prime end ... " << endl;
+}
+
 int main() {
     test1();
     test2();
     test3();
     test4();
     test5();
+    test6();
     return 0;
 }

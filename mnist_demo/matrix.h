@@ -26,6 +26,7 @@ public:
     Matrix operator+(int dt);
     Matrix operator-(int dt);
     Matrix operator-();
+    Matrix operator*(const Matrix &m);
     friend Matrix operator-(int, const Matrix &m);
     std::vector<double>& operator[](unsigned int index);
     Matrix& setAll(double v);

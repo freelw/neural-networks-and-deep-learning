@@ -5,4 +5,6 @@ class Matrix;
 
 Matrix sigmoid(Matrix m);
 
+Matrix sigmoid_prime(Matrix m);
+
 #endif
