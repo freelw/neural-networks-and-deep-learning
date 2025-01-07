@@ -10,8 +10,10 @@ int main(int argc, char *argv[])
         cout << "too few args" << endl;
         return -1;
     }
-    MnistLoader loader;
-    loader.load_data(argv[1]);
+    // MnistLoader loader;
+    // loader.load_data(argv[1]);
+    MnistLoaderV2 loader;
+    loader.load_data();
     /*cout << loader.training_data_len << endl;
     cout << loader.training_data_x_len << endl;
     cout << loader.training_data_y_len << endl;

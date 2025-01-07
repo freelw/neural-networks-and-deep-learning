@@ -77,7 +77,7 @@ void NetWork::minus_wb(int batch_cnt, double eta) {
     }
 }
 
-NetWork::NetWork(const std::vector<int> &_sizes, MnistLoader &_loader)
+NetWork::NetWork(const std::vector<int> &_sizes, MnistLoaderV2 &_loader)
     : num_layers(_sizes.size()),
     sizes(_sizes),
     loader(_loader) {

@@ -1,7 +1,7 @@
 #ifndef NETWORK_H
 #define NETWORK_H
 
-#include "mnist_loader.h"
+#include "mnist_loader_v2.h"
 #include <vector>
 
 class NetWork
@@ -26,9 +26,9 @@ private:
     double *z;
     double **activations;
     double **zs;
-    MnistLoader &loader;
+    MnistLoaderV2 &loader;
 public:
-    NetWork(const std::vector<int> &_sizes, MnistLoader &_loader);
+    NetWork(const std::vector<int> &_sizes, MnistLoaderV2 &_loader);
     ~NetWork();
     std::vector<double> feedforward(const std::vector<double> & a);
     void sigmoid_array(double *arr, size_t size);
