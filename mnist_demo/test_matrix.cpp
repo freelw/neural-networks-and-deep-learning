@@ -6,22 +6,29 @@ using namespace std;
 
 void test1() {
     //normal
+    cout << "test normal start ... " << endl;
     Matrix a(Shape(5,2));
     cout << a.zero() << endl;
     Matrix b(Shape(3,2));
     cout << b << endl;
+    cout << "test normal end ... " << endl;
 }
 
 void test2() {
     // operator +
+
+    cout << "test operator + start ... " << endl;
     Matrix c(Shape(4,3)), d(Shape(4, 3));
     c.setAll(1);
     d.setAll(2);
     cout << c + d << endl;
+    cout << c + 3 << endl;
+    cout << "test operator + end ... " << endl;
 }
 
 void test3() {
     // dot
+    cout << "test dot start ... " << endl;
     Matrix x(Shape(3,2)), y(Shape(2, 3));
     x.zero();
     y.zero();
@@ -38,6 +45,7 @@ void test3() {
     y[1][1] = 7;
     y[1][2] = 7;
     cout << y.dot(x) << endl;
+    cout << "test dot end ... " << endl;
 }
 
 int main() {

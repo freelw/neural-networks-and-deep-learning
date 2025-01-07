@@ -44,6 +44,16 @@ Matrix Matrix::operator+(const Matrix &m) {
     return res;
 }
 
+Matrix Matrix::operator+(int dt) {
+    Matrix res(*this);
+    for (auto i = 0; i < shape.rowCnt; ++i) {
+        for (auto j = 0; j < shape.colCnt; ++j) {
+            res.data[i][j] += dt;
+        }
+    }
+    return res;
+}
+
 std::vector<double>& Matrix::operator[](unsigned int index) {
     return data[index];
 }
