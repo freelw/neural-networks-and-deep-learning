@@ -5,6 +5,7 @@ void MnistLoaderV2::load_data() {
 
     base_loader.load();
     std::vector<std::vector<unsigned char>> trainImages = base_loader.getTrainImages();
+    std::vector<unsigned char> trainLabels = base_loader.getTrainLabels();
     training_data_len = TRAIN_IMAGES_NUM;
     training_data_x_len = trainImages[0].size();
 
@@ -24,6 +25,13 @@ void MnistLoaderV2::load_data() {
     for (size_t i = 0; i < training_data_len; ++ i) {
         for (size_t j = 0; j < training_data_x_len; ++ j) {
             training_data_x[i][j] = trainImages[i][j]*1./256;
+        }
+        for (size_t j = 0; j < training_data_y_len; ++ j) {
+            if (trainLabels[i] == (unsigned char)j) {
+                training_data_y[i][j] = 1;
+            } else {
+                training_data_y[i][j] = 0;
+            }
         }
     }
 }

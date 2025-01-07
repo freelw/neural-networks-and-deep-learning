@@ -31,6 +31,9 @@ void check_eq(MnistLoader &loader1, MnistLoaderV2 &loader2)
         for (size_t j = 0; j < loader1.training_data_x_len; ++ j) {
             check_eq_double(loader1.training_data_x[i][j], loader2.training_data_x[i][j]);
         }
+        for (size_t j = 0; j < loader1.training_data_y_len; ++ j) {
+            check_eq_double(loader1.training_data_y[i][j], loader2.training_data_y[i][j]);
+        }
      }
 }
 int main(int argc, char *argv[])

@@ -5,6 +5,7 @@
 
 #define RESOURCE_BASE "/workspaces/neural-networks-and-deep-learning/mnist_demo/resources/"
 #define IMAGES_PATH RESOURCE_BASE"train-images-idx3-ubyte"
+#define LABELS_PATH RESOURCE_BASE"train-labels-idx1-ubyte"
 
 const std::vector<std::vector<unsigned char>> & MnistLoaderBase::getTrainImages() {
     return train_images;
@@ -24,6 +25,11 @@ int reverse_char(int input) {
 }
 
 void MnistLoaderBase::load() {
+    load_images();
+    load_labels();
+}
+
+void MnistLoaderBase::load_images() {
     std::ifstream images_ifs(IMAGES_PATH, std::ios::binary);
     std::string images_data = std::string(std::istreambuf_iterator<char>(images_ifs), std::istreambuf_iterator<char>());
     unsigned char * p = (unsigned char *)(images_data.c_str());
@@ -31,11 +37,6 @@ void MnistLoaderBase::load() {
     int images_num = reverse_char(*((int *)(p+4)));
     int rows_num = reverse_char(*((int *)(p+8)));
     int cols_num = reverse_char(*((int *)(p+12)));
-
-    std::cout << "magic : " << magic << std::endl;
-    std::cout << "images_num : " << images_num << std::endl;
-    std::cout << "rows_num : " << rows_num << std::endl;
-    std::cout << "cols_num : " << cols_num << std::endl;
 
     if (images_num != EXPECTED_IMAGES_NUM) {
         std::cerr << "images_num = " << images_num << " not equal to " << EXPECTED_IMAGES_NUM << std::endl;
@@ -51,9 +52,27 @@ void MnistLoaderBase::load() {
             tmp.emplace_back(start[j]);
         }
         train_images.emplace_back(tmp);
-        // std::cout << "tmp size : " << tmp.size() << std::endl;
         pos += rows_num*cols_num;
     }
-    std::cout << "train_images size : " << train_images.size() << std::endl;
-    std::cout << "train_images[0] size : " << train_images[0].size() << std::endl;
+}
+
+void MnistLoaderBase::load_labels() {
+
+    std::ifstream labels_ifs(LABELS_PATH, std::ios::binary);
+    std::string labels_data = std::string(std::istreambuf_iterator<char>(labels_ifs), std::istreambuf_iterator<char>());
+    unsigned char * p = (unsigned char *)(labels_data.c_str());
+    int magic = reverse_char(*((int *)p));
+    int lables_num = reverse_char(*((int *)(p+4)));
+    
+    std::cout << "magic : " << magic << std::endl;
+    std::cout << "lables_num : " << lables_num << std::endl;
+
+    if (lables_num != EXPECTED_IMAGES_NUM) {
+        std::cerr << "lables_num = " << lables_num << " not equal to " << EXPECTED_IMAGES_NUM << std::endl;
+        exit(-1);
+    }
+    unsigned char * start = p + 8;
+    for (auto i = 0; i < lables_num; ++ i) {
+        train_labels.emplace_back(start[i]);
+    }
 }

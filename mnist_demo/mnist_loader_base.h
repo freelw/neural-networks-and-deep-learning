@@ -14,15 +14,15 @@ public:
     ~MnistLoaderBase() {}
     const std::vector<std::vector<unsigned char>> & getTrainImages();
     const std::vector<unsigned char> & getTrainLabels();
-
     void load();
 
 private:
+    void load_images();
+    void load_labels();
 
+private:
     std::vector<std::vector<unsigned char>> train_images;
     std::vector<unsigned char> train_labels;
-
-
 };
 
 #endif
