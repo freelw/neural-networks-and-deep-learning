@@ -1,8 +1,8 @@
 all: check_loader mnist_demo
 mnist_demo:
-	g++ main.cpp mnist_loader.cpp mnist_loader_v2.cpp -o mnist_demo
+	g++ main.cpp mnist_loader.cpp mnist_loader_v2.cpp mnist_loader_base.cpp -o mnist_demo
 check_loader:
-	g++ check_loader.cpp mnist_loader.cpp mnist_loader_v2.cpp -o check_loader
+	g++ check_loader.cpp mnist_loader.cpp mnist_loader_v2.cpp mnist_loader_base.cpp -o check_loader
 clean:
 	rm mnist_demo check_loader
 prepare_data:
