@@ -54,6 +54,36 @@ Matrix Matrix::operator+(int dt) {
     return res;
 }
 
+Matrix Matrix::operator-(int dt) {
+    Matrix res(*this);
+    for (auto i = 0; i < shape.rowCnt; ++i) {
+        for (auto j = 0; j < shape.colCnt; ++j) {
+            res.data[i][j] -= dt;
+        }
+    }
+    return res;
+}
+
+Matrix Matrix::operator-() {
+    Matrix res(*this);
+    for (auto i = 0; i < shape.rowCnt; ++i) {
+        for (auto j = 0; j < shape.colCnt; ++j) {
+            res.data[i][j] = -res.data[i][j];
+        }
+    }
+    return res;
+}
+
+Matrix operator-(int v, const Matrix &m) {
+    Matrix res(m);
+    for (auto i = 0; i < m.shape.rowCnt; ++i) {
+        for (auto j = 0; j < m.shape.colCnt; ++j) {
+            res.data[i][j] = v-res.data[i][j];
+        }
+    }
+    return res;
+}
+
 std::vector<double>& Matrix::operator[](unsigned int index) {
     return data[index];
 }

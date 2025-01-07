@@ -24,6 +24,9 @@ public:
     friend ostream &operator<<(ostream &output, const Matrix &m);
     Matrix operator+(const Matrix &m);
     Matrix operator+(int dt);
+    Matrix operator-(int dt);
+    Matrix operator-();
+    friend Matrix operator-(int, const Matrix &m);
     std::vector<double>& operator[](unsigned int index);
     Matrix& setAll(double v);
     Shape getShape();
