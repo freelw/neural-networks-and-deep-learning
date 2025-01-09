@@ -10,6 +10,13 @@ struct Shape {
     int rowCnt;
     int colCnt;
     Shape(int r, int c): rowCnt(r), colCnt(c) {}
+    bool operator==(const Shape &s) {
+        return rowCnt == s.rowCnt && colCnt == s.colCnt;
+    }
+    friend ostream &operator<<(ostream &output, const Shape &s) {
+        output << "(" << s.rowCnt << ", " << s.colCnt << ")";
+        return output;
+    }
 };
 
 class Matrix {
@@ -31,14 +38,14 @@ public:
     friend Matrix operator-(int, const Matrix &m);
     std::vector<double>& operator[](unsigned int index);
     Matrix& setAll(double v);
-    Shape getShape();
+    Shape getShape() const;
     Matrix dot(Matrix &m);
-
+private:
+    void checkShape(const Matrix &m) const;
 private:
     bool initialized;
     Shape shape;
     std::vector<std::vector<double>> data;
-
 };
 
 #endif

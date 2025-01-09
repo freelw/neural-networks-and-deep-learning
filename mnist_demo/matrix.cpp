@@ -1,5 +1,6 @@
 #include "matrix.h"
 
+#include <iostream>
 
 Matrix::Matrix(const Matrix &m):
     shape(m.shape),
@@ -9,6 +10,15 @@ Matrix::Matrix(const Matrix &m):
 
 Matrix& Matrix::zero() {
     return setAll(0);
+}
+
+void Matrix::checkShape(const Matrix &m) const {
+    if (!(this->getShape() == m.getShape())) {
+        std::cerr << 
+            "matrix shape missmatch." << 
+            this->getShape() << " vs " << m.getShape()<< 
+            std::endl;
+    }
 }
 
 ostream &operator<<(ostream &output, const Matrix &m) {
@@ -35,6 +45,7 @@ ostream &operator<<(ostream &output, const Matrix &m) {
 }
 
 Matrix Matrix::operator+(const Matrix &m) const{
+    checkShape(m);
     Matrix res(*this);
     for (auto i = 0; i < shape.rowCnt; ++i) {
         for (auto j = 0; j < shape.colCnt; ++j) {
@@ -85,6 +96,7 @@ Matrix operator-(int v, const Matrix &m) {
 }
 
 Matrix Matrix::operator-(const Matrix &m) const{
+    checkShape(m);
     Matrix res(*this);
     for (auto i = 0; i < shape.rowCnt; ++i) {
         for (auto j = 0; j < shape.colCnt; ++j) {
@@ -95,6 +107,7 @@ Matrix Matrix::operator-(const Matrix &m) const{
 }
 
 Matrix Matrix::operator*(const Matrix &m) const{
+    checkShape(m);
     Matrix res(*this);
     for (auto i = 0; i < shape.rowCnt; ++i) {
         for (auto j = 0; j < shape.colCnt; ++j) {
@@ -121,7 +134,7 @@ Matrix& Matrix::setAll(double v) {
     return *this;
 }
 
-Shape Matrix::getShape() {
+Shape Matrix::getShape() const {
     return shape;
 }
 
