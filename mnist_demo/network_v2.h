@@ -20,6 +20,7 @@ public:
     void update_mini_batch(std::vector<TrainingData*> &mini_batch, double eta);
     void backprop(Matrix &x, Matrix &y, std::vector<Matrix> &delta_nabla_b, std::vector<Matrix> &delta_nabla_w);
     Matrix cost_derivative(const Matrix &output_activations, const Matrix &y);
+    int evaluate(std::vector<TrainingData*> &v_test_data);
 
 private:
     std::vector<int> sizes;

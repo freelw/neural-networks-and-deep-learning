@@ -95,7 +95,7 @@ Matrix operator-(int v, const Matrix &m) {
     return res;
 }
 
-Matrix Matrix::operator-(const Matrix &m) const{
+Matrix Matrix::operator-(const Matrix &m) const {
     checkShape(m);
     Matrix res(*this);
     for (auto i = 0; i < shape.rowCnt; ++i) {
@@ -106,12 +106,22 @@ Matrix Matrix::operator-(const Matrix &m) const{
     return res;
 }
 
-Matrix Matrix::operator*(const Matrix &m) const{
+Matrix Matrix::operator*(const Matrix &m) const {
     checkShape(m);
     Matrix res(*this);
     for (auto i = 0; i < shape.rowCnt; ++i) {
         for (auto j = 0; j < shape.colCnt; ++j) {
             res.data[i][j] *= m.data[i][j];
+        }
+    }
+    return res;
+}
+
+Matrix Matrix::operator*(double v) const {
+    Matrix res(*this);
+    for (auto i = 0; i < shape.rowCnt; ++i) {
+        for (auto j = 0; j < shape.colCnt; ++j) {
+            res.data[i][j] *= v;
         }
     }
     return res;
