@@ -78,7 +78,7 @@ void NetWork::SGD(
         }
 
         for (auto i = 0; i < mini_batches.size(); ++ i) {
-
+            update_mini_batch(mini_batches[i], eta);
         }
 
         std::cout << "Epoch " <<  e << " complete." << std::endl;
