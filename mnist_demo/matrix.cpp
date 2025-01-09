@@ -19,6 +19,9 @@ void Matrix::checkShape(const Matrix &m) const {
             this->getShape() << " vs " << m.getShape()<< 
             std::endl;
     }
+    if (!m.initialized) {
+        std::cerr << "matrix not initialized..." << std::endl;
+    }
 }
 
 ostream &operator<<(ostream &output, const Matrix &m) {

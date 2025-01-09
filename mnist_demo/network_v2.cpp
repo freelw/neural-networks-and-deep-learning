@@ -6,14 +6,6 @@
 #include <algorithm>
 #include <random>
 
-
-class TrainingData {
-public:
-    TrainingData(int, int);
-    Matrix x;
-    int y;
-};
-
 TrainingData::TrainingData(int input_layer_size, int _y)
     : x(Shape(input_layer_size, 1)), y(_y) {
     x.zero();
@@ -62,6 +54,7 @@ Matrix NetWork::feedforward(const Matrix &a) {
 
 void NetWork::SGD(
     std::vector<TrainingData*> &v_training_data,
+    std::vector<TrainingData*> &v_test_data,
     int epochs, int mini_batch_size, double eta) {
 
     int n = v_training_data.size();
@@ -87,15 +80,18 @@ void NetWork::SGD(
 void NetWork::update_mini_batch(
     std::vector<TrainingData*> &mini_batch,
     double eta) {
+        
     std::vector<Matrix> nabla_b;
     std::vector<Matrix> nabla_w;    
     for (auto i = 0; i < sizes.size()-1; ++ i) {
-        nabla_b.emplace_back(Matrix(biases[i].getShape()));
+        nabla_b.emplace_back(Matrix(biases[i].getShape()).zero());
     }
 
     for (auto i = 0; i < sizes.size()-1; ++ i) {
-        nabla_w.emplace_back(Matrix(weights[i].getShape()));
+        nabla_w.emplace_back(Matrix(weights[i].getShape()).zero());
     }
+
+    
 
     for (auto i = 0; i < mini_batch.size(); ++ i) {
         std::vector<Matrix> delta_nabla_b;
@@ -110,7 +106,7 @@ void NetWork::update_mini_batch(
         }
     }
 
-    for (auto i = 0; i < sizes.size(); ++ i) {
+    for (auto i = 0; i < sizes.size()-1; ++ i) {
         weights[i] = weights[i] - nabla_w[i] * (eta / mini_batch.size());
         biases[i] = biases[i] - nabla_b[i] * (eta / mini_batch.size());
     }
@@ -123,25 +119,25 @@ void NetWork::backprop(
     std::vector<Matrix> &delta_nabla_w) {
     
     for (auto i = 0; i < biases.size(); ++ i) {
-        delta_nabla_b.emplace_back(Matrix(biases[i].getShape()));
+        delta_nabla_b.emplace_back(Matrix(biases[i].getShape()).zero());
     }
 
     for (auto i = 0; i < weights.size(); ++ i) {
-        delta_nabla_w.emplace_back(Matrix(weights[i].getShape()));
+        delta_nabla_w.emplace_back(Matrix(weights[i].getShape()).zero());
     }
 
-    Matrix activation(x);
+    // Matrix activation(x);
 
-    std::vector<Matrix> activations;
-    activations.emplace_back(activation);
-    std::vector<Matrix> zs;
-    for (auto i = 0; i < biases.size(); ++ i) {
-        Matrix z = weights[i].dot(activation) + biases[i];
-        zs.emplace_back(z);
-        activation = sigmoid(z);
-        activations.emplace_back(activation);
-    }
-    Matrix delta = cost_derivative(activations[activations.size()-1], y) * sigmoid_prime(zs[zs.size()-1]);
+    // std::vector<Matrix> activations;
+    // activations.emplace_back(activation);
+    // std::vector<Matrix> zs;
+    // for (auto i = 0; i < biases.size(); ++ i) {
+    //     Matrix z = weights[i].dot(activation) + biases[i];
+    //     zs.emplace_back(z);
+    //     activation = sigmoid(z);
+    //     activations.emplace_back(activation);
+    // }
+    // Matrix delta = cost_derivative(activations[activations.size()-1], y) * sigmoid_prime(zs[zs.size()-1]);
 }
 
 int NetWork::evaluate(std::vector<TrainingData*> &v_test_data) {

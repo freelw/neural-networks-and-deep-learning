@@ -49,4 +49,11 @@ private:
     std::vector<std::vector<double>> data;
 };
 
+class TrainingData {
+public:
+    TrainingData(int, int);
+    Matrix x;
+    int y;
+};
+
 #endif

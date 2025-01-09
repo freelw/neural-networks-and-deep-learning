@@ -2,7 +2,6 @@
 #include <fstream>
 #include <iostream>
 
-
 #define RESOURCE_BASE "/workspaces/neural-networks-and-deep-learning/mnist_demo/resources/"
 #define IMAGES_PATH RESOURCE_BASE"train-images-idx3-ubyte"
 #define LABELS_PATH RESOURCE_BASE"train-labels-idx1-ubyte"
