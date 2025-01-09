@@ -91,8 +91,6 @@ void NetWork::update_mini_batch(
         nabla_w.emplace_back(Matrix(weights[i].getShape()).zero());
     }
 
-    
-
     for (auto i = 0; i < mini_batch.size(); ++ i) {
         std::vector<Matrix> delta_nabla_b;
         std::vector<Matrix> delta_nabla_w;
