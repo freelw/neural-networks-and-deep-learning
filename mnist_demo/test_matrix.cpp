@@ -121,6 +121,22 @@ void test7() {
     cout << "test network base end ... " << endl;
 }
 
+void test8() {
+    //tranpose
+    cout << "test transpose start ... " << endl;
+    Matrix x(Shape(3,2));
+    x.zero();
+    x[0][0] = 1;
+    x[1][0] = 2;
+    x[2][0] = 3;
+    x[0][1] = 6;
+    x[1][1] = 6;
+    x[2][1] = 6;
+    cout << x << endl;
+    cout << x.transpose() << endl;
+    cout << "test transpose prime end ... " << endl;   
+}
+
 int main() {
     test1();
     test2();
@@ -129,5 +145,6 @@ int main() {
     test5();
     test6();
     test7();
+    test8();
     return 0;
 }

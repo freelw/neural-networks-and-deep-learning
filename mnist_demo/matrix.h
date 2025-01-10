@@ -41,6 +41,7 @@ public:
     Matrix& setAll(double v);
     Shape getShape() const;
     Matrix dot(Matrix &m);
+    Matrix transpose();
 private:
     void checkShape(const Matrix &m) const;
 private:

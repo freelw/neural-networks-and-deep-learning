@@ -165,3 +165,14 @@ Matrix Matrix::dot(Matrix &m) {
     }
     return res;
 }
+
+Matrix Matrix::transpose() {
+    Matrix res(Shape(shape.colCnt, shape.rowCnt));
+    res.zero();
+    for (auto i = 0; i < shape.colCnt; ++ i) {
+        for (auto j = 0; j < shape.rowCnt; ++ j) {
+            res[i][j] = data[j][i]; 
+        }
+    }
+    return res;
+}
