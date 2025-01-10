@@ -148,7 +148,7 @@ void NetWork::backprop(
         
         // std::cout << weights[l].getShape() << std::endl;
         if (l >= 1) {
-            std::cout << zs[l-1].getShape() << std::endl;
+            // std::cout << zs[l-1].getShape() << std::endl;
             delta = weights[l].transpose().dot(delta) * sigmoid_prime(zs[l-1]);
         }
         // std::cout << "----l : " << l << std::endl;
