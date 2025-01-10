@@ -1,6 +1,7 @@
 #include "matrix.h"
 
 #include <iostream>
+#include <assert.h>
 
 Matrix::Matrix(const Matrix &m):
     shape(m.shape),
@@ -128,6 +129,18 @@ Matrix Matrix::operator*(double v) const {
         }
     }
     return res;
+}
+
+Matrix& Matrix::operator=(const Matrix &m) {
+    assert(m.initialized);
+    shape = m.shape;
+    this->setAll(0);
+     for (auto i = 0; i < shape.rowCnt; ++i) {
+        for (auto j = 0; j < shape.colCnt; ++j) {
+            data[i][j] = m.data[i][j];
+        }
+    }
+    return *this;
 }
 
 std::vector<double>& Matrix::operator[](unsigned int index) {

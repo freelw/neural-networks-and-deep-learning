@@ -137,6 +137,23 @@ void test8() {
     cout << "test transpose prime end ... " << endl;   
 }
 
+void test9() {
+    //tranpose
+    cout << "test assign start ... " << endl;
+    Matrix x(Shape(3,2));
+    x.zero();
+    x[0][0] = 1;
+    x[1][0] = 2;
+    x[2][0] = 3;
+    x[0][1] = 6;
+    x[1][1] = 6;
+    x[2][1] = 6;
+    Matrix y(Shape(5,6));
+    y = x;
+    cout << y << endl;
+    cout << "test assign prime end ... " << endl;   
+}
+
 int main() {
     test1();
     test2();
@@ -146,5 +163,6 @@ int main() {
     test6();
     test7();
     test8();
+    test9();
     return 0;
 }
