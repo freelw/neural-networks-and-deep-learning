@@ -37,7 +37,7 @@ void MnistLoaderBase::load_images() {
     int rows_num = reverse_char(*((int *)(p+8)));
     int cols_num = reverse_char(*((int *)(p+12)));
 
-    #ifndef WANLITEST
+    #ifndef WANGLITEST
     if (images_num != EXPECTED_IMAGES_NUM) {
         std::cerr << "images_num = " << images_num << " not equal to " << EXPECTED_IMAGES_NUM << std::endl;
         exit(-1);
@@ -68,7 +68,7 @@ void MnistLoaderBase::load_labels() {
     std::cout << "magic : " << magic << std::endl;
     std::cout << "lables_num : " << lables_num << std::endl;
 
-    #ifndef WANLITEST
+    #ifndef WANGLITEST
     if (lables_num != EXPECTED_IMAGES_NUM) {
         std::cerr << "lables_num = " << lables_num << " not equal to " << EXPECTED_IMAGES_NUM << std::endl;
         exit(-1);

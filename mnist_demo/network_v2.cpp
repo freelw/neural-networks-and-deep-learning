@@ -67,10 +67,8 @@ void NetWork::SGD(
 
     int n = v_training_data.size();
     for (auto e = 0; e < epochs; ++ e) {
-        #ifndef WANGLITEST
         auto rng = std::default_random_engine {};
         std::shuffle(std::begin(v_training_data), std::end(v_training_data), rng);
-        #endif
         std::vector<std::vector<TrainingData*>> mini_batches;
         for (auto i = 0; i < n; i += mini_batch_size) {
             std::vector<TrainingData*> tmp;

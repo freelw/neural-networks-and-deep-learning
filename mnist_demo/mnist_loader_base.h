@@ -3,8 +3,8 @@
 
 #include <vector>
 
-#define WANLITEST
-#ifdef WANLITEST
+#define WANGLITEST
+#ifdef WANGLITEST
 #define EXPECTED_IMAGES_NUM 2
 #define TRAIN_IMAGES_NUM 1
 #define TEST_IMAGES_NUM 1

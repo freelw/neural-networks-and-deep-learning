@@ -10,7 +10,7 @@ using namespace std;
 int main(int argc, char *argv[])
 {
     vector<int> sizes;
-    #ifndef WANLITEST
+    #ifndef WANGLITEST
     sizes.push_back(INPUT_LAYER_SIZE);
     sizes.push_back(30);
     sizes.push_back(10);
@@ -43,7 +43,7 @@ int main(int argc, char *argv[])
 
     assert(v_training_data.size() == TRAIN_IMAGES_NUM);
     assert(v_test_data.size() == TEST_IMAGES_NUM);
-    #ifndef WANLITEST
+    #ifndef WANGLITEST
     mynet.SGD(v_training_data, v_test_data, 30, 30, 0.1);
     #else
     mynet.SGD(v_training_data, v_test_data, 1, 1, 0.1);
