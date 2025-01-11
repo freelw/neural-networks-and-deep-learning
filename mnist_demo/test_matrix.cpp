@@ -151,7 +151,23 @@ void test9() {
     Matrix y(Shape(5,6));
     y = x;
     cout << y << endl;
-    cout << "test assign prime end ... " << endl;   
+    cout << "test assign prime end ... " << endl;
+}
+
+void test10() {
+    //copy constructor
+    cout << "test copy constructor start ... " << endl;
+    Matrix x(Shape(3,2));
+    x.zero();
+    x[0][0] = 1;
+    x[1][0] = 2;
+    x[2][0] = 3;
+    x[0][1] = 6;
+    x[1][1] = 6;
+    x[2][1] = 6;
+    Matrix y(x);
+    cout << y << endl;
+    cout << "test copy constructor end ... " << endl;
 }
 
 int main() {
@@ -164,5 +180,6 @@ int main() {
     test7();
     test8();
     test9();
+    test10();
     return 0;
 }

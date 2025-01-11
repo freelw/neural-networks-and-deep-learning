@@ -3,11 +3,11 @@
 
 #include <vector>
 
-#define WANGLITEST
+//#define WANGLITEST
 #ifdef WANGLITEST
-#define EXPECTED_IMAGES_NUM 2
-#define TRAIN_IMAGES_NUM 1
-#define TEST_IMAGES_NUM 1
+#define EXPECTED_IMAGES_NUM 12
+#define TRAIN_IMAGES_NUM 10
+#define TEST_IMAGES_NUM 2
 #else
 #define EXPECTED_IMAGES_NUM 60000
 #define TRAIN_IMAGES_NUM 50000
