@@ -10,9 +10,15 @@ using namespace std;
 int main(int argc, char *argv[])
 {
     vector<int> sizes;
+    #ifndef WANLITEST
     sizes.push_back(INPUT_LAYER_SIZE);
     sizes.push_back(30);
     sizes.push_back(10);
+    #else
+    sizes.push_back(INPUT_LAYER_SIZE);
+    sizes.push_back(2);
+    sizes.push_back(10);
+    #endif
     NetWork mynet(sizes);
     MnistLoaderBase loader;
     loader.load();
@@ -37,7 +43,11 @@ int main(int argc, char *argv[])
 
     assert(v_training_data.size() == TRAIN_IMAGES_NUM);
     assert(v_test_data.size() == TEST_IMAGES_NUM);
-    mynet.SGD(v_training_data, v_test_data, 30, 10, 0.1);
+    #ifndef WANLITEST
+    mynet.SGD(v_training_data, v_test_data, 30, 30, 0.1);
+    #else
+    mynet.SGD(v_training_data, v_test_data, 1, 1, 0.1);
+    #endif
 
     for (auto i = 0; i < v_training_data.size(); ++ i) {
         delete v_training_data[i];

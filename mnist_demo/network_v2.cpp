@@ -14,8 +14,12 @@ TrainingData::TrainingData(int input_layer_size, int _y)
 double sigmoid_double(double z) {
     double ret = 1./(1.+exp(-z));
     // std::cout << "z : " << z << std::endl;
-    // std::cout << "ret : " << ret << std::endl;
+    //std::cout << "ret : " << ret << std::endl;
     return ret;
+}
+
+double sigmoid_prime_double(double z) {
+    return sigmoid_double(z)*(1-sigmoid_double(z));
 }
 
 Matrix sigmoid(Matrix m) {
@@ -30,7 +34,14 @@ Matrix sigmoid(Matrix m) {
 }
 
 Matrix sigmoid_prime(Matrix m) {
-    return sigmoid(m)*(1-sigmoid(m));
+    Shape shape = m.getShape();
+    Matrix res(m);
+    for (auto i = 0; i < shape.rowCnt; ++i) {
+        for (auto j = 0; j < shape.colCnt; ++j) {
+            res[i][j] = sigmoid_prime_double(res[i][j]);
+        }
+    }
+    return res;
 }
 
 NetWork::NetWork(const std::vector<int> &_sizes)
@@ -59,9 +70,10 @@ void NetWork::SGD(
 
     int n = v_training_data.size();
     for (auto e = 0; e < epochs; ++ e) {
+        #ifndef WANGLITEST
         auto rng = std::default_random_engine {};
         std::shuffle(std::begin(v_training_data), std::end(v_training_data), rng);
-
+        #endif
         std::vector<std::vector<TrainingData*>> mini_batches;
         for (auto i = 0; i < n; i += mini_batch_size) {
             std::vector<TrainingData*> tmp;
@@ -99,19 +111,20 @@ void NetWork::update_mini_batch(
         y.zero();
         y[mini_batch[i]->y][0] = 1;
         backprop(mini_batch[i]->x, y, delta_nabla_b, delta_nabla_w);
-        //std::cerr << "end back" << std::endl;
         for (auto j = 0; j < L; ++ j) {
             nabla_b[j] = nabla_b[j] + delta_nabla_b[j];
             nabla_w[j] = nabla_w[j] + delta_nabla_w[j];
+            // std::cout << "delta_nabla_w[" << j << "] : " << delta_nabla_w[j] << std::endl;
         }
     }
 
     for (auto i = 0; i < L; ++ i) {
-        weights[i] = weights[i] - nabla_w[i] * (eta / mini_batch.size());
-        biases[i] = biases[i] - nabla_b[i] * (eta / mini_batch.size());
+        // std::cout << "weights[" << i << "] before delta: " << weights[i] << std::endl;
+        weights[i] = weights[i] - nabla_w[i] * eta / mini_batch.size();
+        biases[i] = biases[i] - nabla_b[i] * eta / mini_batch.size();
+        // std::cout << "weights[" << i << "] after delta: " << weights[i] << std::endl;
     }
 }
-
 
 void NetWork::backprop(
     Matrix &x, Matrix &y,
@@ -130,26 +143,39 @@ void NetWork::backprop(
     std::vector<Matrix> activations;
     activations.emplace_back(activation);
     std::vector<Matrix> zs;
+    // cout << "y : " << y << endl;
     for (auto i = 0; i < L; ++ i) {
         Matrix z = weights[i].dot(activation) + biases[i];
+        // std::cout << "i : " << i << " z : " << z << std::endl;
         zs.emplace_back(z);
         activation = sigmoid(z);
         activations.emplace_back(activation);
     }
     Matrix delta = cost_derivative(activations[activations.size()-1], y) * sigmoid_prime(zs[zs.size()-1]);
+    // std::cout << delta << std::endl;
+    // std::cout << zs[zs.size() - 1] << std::endl;
+    
     for (int l = L-1; l >= 0; -- l) {
-        //std::cout << "loop start" << std::endl;
-        //std::cout << delta.getShape() << std::endl;
+        // std::cout << "loop start l : " << l << std::endl;
+        // std::cout << delta.getShape() << std::endl;
         delta_nabla_b[l] = delta;
         auto activation_transpose = activations[l].transpose();
-        // std::cout << activation_transpose.getShape() << std::endl;
+        // std::cout << "activation_transpose :" << activation_transpose << std::endl;
+        // std::cout << "activation_transpose :" << activation_transpose << std::endl;
+        //std::cout << "delta :" << delta << std::endl;
         delta_nabla_w[l] = delta.dot(activation_transpose);
-        //std::cout << delta_nabla_w[l].getShape() << std::endl;
+        // std::cout << "delta_nabla_w[" << l << "] :" << delta_nabla_w[l] << std::endl;
+        // std::cout << "delta_nabla_w[" << l << "] " << delta_nabla_w[l] << std::endl;
         
         // std::cout << weights[l].getShape() << std::endl;
         if (l >= 1) {
             // std::cout << zs[l-1].getShape() << std::endl;
+            // std::cout << "weights[" << l <<"]" << weights[l] << endl;
+            // std::cout << "delta before: " << delta << std::endl;
+            // std::cout << "zs[l-1] : " << zs[l-1] << std::endl;
+            // std::cout << "sigmoid_prime(zs[l-1]) : " << sigmoid_prime(zs[l-1]) << std::endl;
             delta = weights[l].transpose().dot(delta) * sigmoid_prime(zs[l-1]);
+            //std::cout << "delta : " << delta << std::endl;
         }
         // std::cout << "----l : " << l << std::endl;
     }
@@ -165,6 +191,7 @@ int NetWork::evaluate(std::vector<TrainingData*> &v_test_data) {
                 index = j;
             }
         }
+        // std::cout << index << " " <<  v_test_data[i]->y << std::endl;
         if (index == v_test_data[i]->y) {
             sum ++;
         }

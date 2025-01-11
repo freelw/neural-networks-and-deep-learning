@@ -131,6 +131,16 @@ Matrix Matrix::operator*(double v) const {
     return res;
 }
 
+Matrix Matrix::operator/(double v) const {
+    Matrix res(*this);
+    for (auto i = 0; i < shape.rowCnt; ++i) {
+        for (auto j = 0; j < shape.colCnt; ++j) {
+            res.data[i][j] /= v;
+        }
+    }
+    return res;
+}
+
 Matrix& Matrix::operator=(const Matrix &m) {
     assert(m.initialized);
     shape = m.shape;

@@ -3,9 +3,17 @@
 
 #include <vector>
 
+#define WANLITEST
+#ifdef WANLITEST
+#define EXPECTED_IMAGES_NUM 2
+#define TRAIN_IMAGES_NUM 1
+#define TEST_IMAGES_NUM 1
+#else
 #define EXPECTED_IMAGES_NUM 60000
 #define TRAIN_IMAGES_NUM 50000
 #define TEST_IMAGES_NUM 10000
+#endif
+
 
 class MnistLoaderBase {
 

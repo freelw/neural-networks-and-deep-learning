@@ -37,10 +37,12 @@ void MnistLoaderBase::load_images() {
     int rows_num = reverse_char(*((int *)(p+8)));
     int cols_num = reverse_char(*((int *)(p+12)));
 
+    #ifndef WANLITEST
     if (images_num != EXPECTED_IMAGES_NUM) {
         std::cerr << "images_num = " << images_num << " not equal to " << EXPECTED_IMAGES_NUM << std::endl;
         exit(-1);
     }
+    #endif
     train_images.reserve(EXPECTED_IMAGES_NUM);
     int pos = 16;
     for (auto i = 0; i < EXPECTED_IMAGES_NUM; ++ i) {
@@ -66,12 +68,14 @@ void MnistLoaderBase::load_labels() {
     std::cout << "magic : " << magic << std::endl;
     std::cout << "lables_num : " << lables_num << std::endl;
 
+    #ifndef WANLITEST
     if (lables_num != EXPECTED_IMAGES_NUM) {
         std::cerr << "lables_num = " << lables_num << " not equal to " << EXPECTED_IMAGES_NUM << std::endl;
         exit(-1);
     }
+    #endif
     unsigned char * start = p + 8;
-    for (auto i = 0; i < lables_num; ++ i) {
+    for (auto i = 0; i < EXPECTED_IMAGES_NUM; ++ i) {
         train_labels.emplace_back(start[i]);
     }
 }

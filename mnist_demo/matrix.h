@@ -36,6 +36,7 @@ public:
     Matrix operator-(const Matrix &m) const;
     Matrix operator*(const Matrix &m) const;
     Matrix operator*(double) const;
+    Matrix operator/(double) const;
     Matrix& operator=(const Matrix &m);
     friend Matrix operator-(int, const Matrix &m);
     std::vector<double>& operator[](unsigned int index);
