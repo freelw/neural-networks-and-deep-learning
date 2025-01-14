@@ -35,14 +35,15 @@ Matrix sigmoid(Matrix m) {
 }
 
 Matrix sigmoid_prime(Matrix m) {
-    Shape shape = m.getShape();
-    Matrix res(m);
-    for (auto i = 0; i < shape.rowCnt; ++i) {
-        for (auto j = 0; j < shape.colCnt; ++j) {
-            res[i][j] = sigmoid_prime_double(res[i][j]);
-        }
-    }
-    return res;
+    // Shape shape = m.getShape();
+    // Matrix res(m);
+    // for (auto i = 0; i < shape.rowCnt; ++i) {
+    //     for (auto j = 0; j < shape.colCnt; ++j) {
+    //         res[i][j] = sigmoid_prime_double(res[i][j]);
+    //     }
+    // }
+    // return res;
+    return sigmoid(m) * (1 - sigmoid(m));
 }
 
 NetWork::NetWork(const std::vector<int> &_sizes)

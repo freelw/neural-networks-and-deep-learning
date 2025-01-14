@@ -170,6 +170,44 @@ void test10() {
     cout << "test copy constructor end ... " << endl;
 }
 
+void test11() {
+    //copy constructor
+    cout << "test feedforward and backprop start ... " << endl;
+    Matrix y(Shape(3,1));
+    y.zero();
+    y[0][0] = 1;
+    y[1][0] = 0;
+    y[2][0] = 0;
+    std::vector<int> sizes;
+    sizes.push_back(5);
+    sizes.push_back(4);
+    sizes.push_back(3);
+    NetWork net(sizes);
+    Matrix a(Shape(5,1));
+    a.zero();
+    a[0][0] = 2;
+    a[1][0] = 1;
+    a[2][0] = 3;
+    a[3][0] = 5;
+    a[4][0] = 4;
+    cout << y << endl;
+    cout << "-----feedforward----" << endl;
+    cout << net.feedforward(a) << endl;
+
+    std::vector<Matrix> delta_nabla_b;
+    std::vector<Matrix> delta_nabla_w;
+    net.backprop(a, y, delta_nabla_b, delta_nabla_w);
+
+    cout << "-----backprop----" << endl;
+    for (auto i = 0; i < sizes.size()-1; ++ i) {
+        cout << delta_nabla_b[i] << endl;
+    }
+    for (auto i = 0; i < sizes.size()-1; ++ i) {
+        cout << delta_nabla_w[i] << endl;
+    }
+    cout << "test feedforward and backprop end ... " << endl;
+}
+
 int main() {
     test1();
     test2();
@@ -181,5 +219,6 @@ int main() {
     test8();
     test9();
     test10();
+    test11();
     return 0;
 }
