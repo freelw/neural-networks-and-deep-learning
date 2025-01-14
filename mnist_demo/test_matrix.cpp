@@ -208,6 +208,23 @@ void test11() {
     cout << "test feedforward and backprop end ... " << endl;
 }
 
+void test12() {
+    cout << "test update_mini_batch start ... " << endl;
+    TrainingData data(5, 0);
+    std::vector<TrainingData*> minibatch;
+    minibatch.push_back(&data);
+    std::vector<int> sizes;
+    sizes.push_back(5);
+    sizes.push_back(4);
+    sizes.push_back(3);
+    NetWork net(sizes);
+
+    net.update_mini_batch(minibatch, 0.1);
+
+    cout << net << endl;
+    cout << "test update_mini_batch end ... " << endl;
+}
+
 int main() {
     test1();
     test2();
@@ -220,5 +237,6 @@ int main() {
     test9();
     test10();
     test11();
+    test12();
     return 0;
 }

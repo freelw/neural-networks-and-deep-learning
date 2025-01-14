@@ -2,6 +2,9 @@
 #define NETWORK_V2_H
 
 #include <vector>
+#include <ostream>
+
+using namespace std;
 
 class Matrix;
 
@@ -24,6 +27,7 @@ public:
     void backprop(Matrix &x, Matrix &y, std::vector<Matrix> &delta_nabla_b, std::vector<Matrix> &delta_nabla_w);
     Matrix cost_derivative(const Matrix &output_activations, const Matrix &y);
     int evaluate(std::vector<TrainingData*> &v_test_data);
+    friend ostream &operator<<(ostream &output, const NetWork &s);
 
 private:
     std::vector<int> sizes;

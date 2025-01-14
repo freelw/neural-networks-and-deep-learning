@@ -201,3 +201,16 @@ Matrix NetWork::cost_derivative(
     const Matrix &y) {
     return output_activations - y;
 }
+
+ostream &operator<<(ostream &output, const NetWork &s) {
+    const int L = s.sizes.size() - 1;
+    output << "biases : " << endl;
+    for (auto i = 0; i < L; ++ i) {
+        output << s.biases[i] << endl;
+    }
+    output << "weights : " << endl;
+    for (auto i = 0; i < L; ++ i) {
+        output << s.weights[i] << endl;
+    }
+    return output;
+}
