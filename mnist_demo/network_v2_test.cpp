@@ -27,7 +27,6 @@ int main(int argc, char *argv[])
     std::vector<TrainingData*> v_test_data;
     for (auto i = 0; i < TRAIN_IMAGES_NUM; ++ i) {
         TrainingData *p = new TrainingData(INPUT_LAYER_SIZE, loader.getTrainLabels()[i]);
-        // cout << p->y << endl;
         for (auto j = 0; j < INPUT_LAYER_SIZE; ++ j) {
             p->x[j][0] = loader.getTrainImages()[i][j]*1./256;
         }
