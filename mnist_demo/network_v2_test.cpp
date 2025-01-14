@@ -36,27 +36,9 @@ int main(int argc, char *argv[])
     for (auto i = 0; i < TEST_IMAGES_NUM; ++ i) {
         int index = i + TRAIN_IMAGES_NUM;
         TrainingData *p = new TrainingData(INPUT_LAYER_SIZE, loader.getTrainLabels()[index]);
-        //cout << p->y << endl;
         for (auto j = 0; j < INPUT_LAYER_SIZE; ++ j) {
             p->x[j][0] = loader.getTrainImages()[index][j]*1./256;
         }
-        // for (auto j = 0; j < 10; ++ j) {
-        //     cout << p->x[j][0] << " ";
-        // }
-        // cout << endl;
-        // if (i > 0) {
-        //     bool eq = true;
-        //     for (auto j = 0; j < INPUT_LAYER_SIZE; ++ j) {
-        //         if (p->x[j][0] != v_test_data[i-1]->x[j][0]) {
-        //             eq = false;
-        //         }
-        //     }
-        //     if (eq) {
-        //         cout << "eq !" << endl;
-        //     } else {
-        //         // cout << "neq !" << endl;
-        //     }
-        // }
         v_test_data.emplace_back(p);
     }
     cout << "data loaded." << endl;
