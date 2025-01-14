@@ -5,6 +5,7 @@
 #include <iostream>
 #include <algorithm>
 #include <random>
+#include <chrono>
 
 TrainingData::TrainingData(int input_layer_size, int _y)
     : x(Shape(input_layer_size, 1)), y(_y) {
@@ -54,6 +55,30 @@ NetWork::NetWork(const std::vector<int> &_sizes)
     for (auto i = 1; i < sizes.size(); ++ i) {
         weights.emplace_back(Matrix(Shape(sizes[i], sizes[i-1])).zero());
     }
+
+    unsigned seed = std::chrono::system_clock::now().time_since_epoch().count();
+    std::default_random_engine generator(seed);
+    std::normal_distribution<double> distribution(0.0, 1.0);
+    
+    const int L = sizes.size() - 1;
+    for (auto i = 0; i < L; ++ i) {
+        Shape bs = biases[i].getShape();
+        for (auto j = 0; j < bs.rowCnt; ++ j) {
+            for (auto k = 0; k < bs.colCnt; ++ k) {
+                biases[i][j][k] = distribution(generator);
+            }
+        }
+    }
+
+    for (auto i = 0; i < L; ++ i) {
+        Shape ws = weights[i].getShape();
+        for (auto j = 0; j < ws.rowCnt; ++ j) {
+            for (auto k = 0; k < ws.colCnt; ++ k) {
+                weights[i][j][k] = distribution(generator);
+            }
+        }
+    }
+
     assert(biases.size() == weights.size());
 }
 
