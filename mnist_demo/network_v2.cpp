@@ -83,16 +83,19 @@ void NetWork::SGD(
         std::shuffle(std::begin(v_training_data), std::end(v_training_data), rng);
         std::vector<std::vector<TrainingData*>> mini_batches;
         for (auto i = 0; i < n; i += mini_batch_size) {
+            // cout << "i : " << i << " n : " << n << endl;
             std::vector<TrainingData*> tmp;
             auto end = min(i+mini_batch_size, n);
+            //cout << "i : " << i << " end : " << end << endl;
             tmp.assign(v_training_data.begin()+i,v_training_data.begin()+end);
             mini_batches.emplace_back(tmp);
         }
 
         for (auto i = 0; i < mini_batches.size(); ++ i) {
+            // cout << "mini_batches[i].size()" << mini_batches[i].size() << endl;
             update_mini_batch(mini_batches[i], eta);
         }
-        std::cout << "Epoch " << e << " : " << evaluate(v_test_data) << " / " << n << std::endl;
+        std::cout << "Epoch " << e << " : " << evaluate(v_test_data) << " / " << v_test_data.size() << std::endl;
     }   
 }
 
