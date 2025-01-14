@@ -13,15 +13,7 @@ TrainingData::TrainingData(int input_layer_size, int _y)
 }
 
 double sigmoid_double(double z) {
-    double ret = 1./(1.+exp(-z));
-
-    // cout << "z : " << z << endl;
-    // cout << "ret : " << ret << endl;
-    return ret;
-}
-
-double sigmoid_prime_double(double z) {
-    return sigmoid_double(z)*(1-sigmoid_double(z));
+    return 1./(1.+exp(-z));
 }
 
 Matrix sigmoid(Matrix m) {
@@ -36,14 +28,6 @@ Matrix sigmoid(Matrix m) {
 }
 
 Matrix sigmoid_prime(Matrix m) {
-    // Shape shape = m.getShape();
-    // Matrix res(m);
-    // for (auto i = 0; i < shape.rowCnt; ++i) {
-    //     for (auto j = 0; j < shape.colCnt; ++j) {
-    //         res[i][j] = sigmoid_prime_double(res[i][j]);
-    //     }
-    // }
-    // return res;
     return sigmoid(m) * (1 - sigmoid(m));
 }
 
@@ -84,15 +68,9 @@ NetWork::NetWork(const std::vector<int> &_sizes)
 
 Matrix NetWork::feedforward(const Matrix &a) {
     Matrix res(a);
-    // cout << "feedforward a : " << a << endl;
     for (auto i = 0; i < sizes.size()-1; ++ i) {
-        // cout << "weights[" << i << "]" << weights[i] << endl;
-        // cout << "biases[" << i << "]" << biases[i] << endl;
         res = sigmoid(weights[i].dot(res) + biases[i]);
-        // cout << "feedforward res : " << res << endl;
     }
-    // cout << "feedforward a : " << a << endl;
-    // cout << "feedforward res : " << res << endl;
     return res;
 }
 
@@ -103,21 +81,17 @@ void NetWork::SGD(
 
     int n = v_training_data.size();
     for (auto e = 0; e < epochs; ++ e) {
-        // std::cout << "Epoch " << e << " start . ------------------------" << endl;
         auto rng = std::default_random_engine {};
         std::shuffle(std::begin(v_training_data), std::end(v_training_data), rng);
         std::vector<std::vector<TrainingData*>> mini_batches;
         for (auto i = 0; i < n; i += mini_batch_size) {
-            // cout << "i : " << i << " n : " << n << endl;
             std::vector<TrainingData*> tmp;
             auto end = min(i+mini_batch_size, n);
-            //cout << "i : " << i << " end : " << end << endl;
             tmp.assign(v_training_data.begin()+i,v_training_data.begin()+end);
             mini_batches.emplace_back(tmp);
         }
 
         for (auto i = 0; i < mini_batches.size(); ++ i) {
-            // cout << "mini_batches[i].size()" << mini_batches[i].size() << endl;
             update_mini_batch(mini_batches[i], eta);
         }
         std::cout << "Epoch " << e << " : " << evaluate(v_test_data) << " / " << v_test_data.size() << std::endl;
@@ -163,7 +137,6 @@ void NetWork::backprop(
     std::vector<Matrix> &delta_nabla_b,
     std::vector<Matrix> &delta_nabla_w) {
     
-    // cout << "y : " << y << endl;
     const auto L = sizes.size() - 1;
     for (auto i = 0; i < L; ++ i) {
         delta_nabla_b.emplace_back(Matrix(biases[i].getShape()));
@@ -184,23 +157,12 @@ void NetWork::backprop(
     }
     assert(activations.size() == L + 1);
     Matrix delta = cost_derivative(activations[L], y) * sigmoid_prime(zs[L-1]);
-    // cout << "detlta L : " << delta << endl;
-    // cout << "activations[L] : " << activations[L] << endl;
-    // cout << "zs[L-1] : " << zs[L-1] << endl;
-    // cout << "y : " << y << endl;
     for (int l = L-1; l >= 0; -- l) {
-        // cout << "l : " << l << endl;
-        // cout << "delta : " << delta << endl;
         delta_nabla_b[l] = delta;
         auto activation_transpose = activations[l].transpose();
-        // cout << "activation_transpose : " << activation_transpose << endl;
         delta_nabla_w[l] = delta.dot(activation_transpose);
-        // cout << "delta_nabla_w[" << l << "] " << delta_nabla_w[l] << endl;
         if (l >= 1) {
-            // cout << "zs [" << l-1 << "] : " << zs[l-1] << endl;
-            //cout << "delta before : " << delta << endl;
             delta = weights[l].transpose().dot(delta) * sigmoid_prime(zs[l-1]);
-            // cout << "delta next : " << delta << endl;
         }
     }
 }
@@ -209,14 +171,12 @@ int NetWork::evaluate(std::vector<TrainingData*> &v_test_data) {
     int sum = 0;
     for (auto i = 0; i < v_test_data.size(); ++ i) {
         Matrix res = feedforward(v_test_data[i]->x);
-        // cout << "res : " << res << endl;
         int index = 0;
         for (auto j = 1; j < sizes[sizes.size() - 1]; ++ j) {
             if (res[j][0] > res[index][0]) {
                 index = j;
             }
         }
-        // cout << "evaluate : " << index << " " << v_test_data[i]->y << endl;
         if (index == v_test_data[i]->y) {
             sum ++;
         }
