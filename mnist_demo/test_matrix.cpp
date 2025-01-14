@@ -211,6 +211,11 @@ void test11() {
 void test12() {
     cout << "test update_mini_batch start ... " << endl;
     TrainingData data(5, 0);
+    data.x[0][0] = 2;
+    data.x[1][0] = 1;
+    data.x[2][0] = 3;
+    data.x[3][0] = 5;
+    data.x[4][0] = 4;
     std::vector<TrainingData*> minibatch;
     minibatch.push_back(&data);
     std::vector<int> sizes;
@@ -219,7 +224,9 @@ void test12() {
     sizes.push_back(3);
     NetWork net(sizes);
 
-    net.update_mini_batch(minibatch, 0.1);
+    for (auto i = 0; i < 2; ++ i) {
+        net.update_mini_batch(minibatch, 0.1);
+    }
 
     cout << net << endl;
     cout << "test update_mini_batch end ... " << endl;
